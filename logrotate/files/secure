@@ -1,5 +1,0 @@
-/var/log/secure {
-        weekly
-        rotate 13
-        compress
-}

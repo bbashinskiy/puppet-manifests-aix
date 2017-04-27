@@ -1,4 +1,4 @@
-class syslog::aix_config {
+class syslog::config {
 	file { 
 		'/etc/syslog.conf':
                 ensure 	=> present,
@@ -25,7 +25,7 @@ class syslog::aix_config {
 	
 }
 
-class syslog::aix_service {
+class syslog::service {
 	/*file_line { 'enable syslogd service':
                 path  => '/etc/rc.tcpip',
                 line  => 'start /usr/sbin/syslogd "$src_running"',
@@ -33,6 +33,6 @@ class syslog::aix_service {
 }
 
 class syslog {
-        include syslog::aix_config, syslog::aix_service
-	Class['syslog::aix_config'] ~> Class['syslog::aix_service']
+        include syslog::config, syslog::service
+	Class['syslog::config'] ~> Class['syslog::service']
 }
