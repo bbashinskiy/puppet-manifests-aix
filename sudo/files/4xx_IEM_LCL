@@ -1,0 +1,54 @@
+## Begin Customer specific 4xx_IEM_LCL template for ALZ - 
+# Ver 1.2 Date <2015-08-13> * CUSTOMER * Refer <ref no> End#
+#
+#  Description: local include file 4xx_IEM_LCL
+#  Software products and versions: IEM, <app_version>
+#  Supported OS platforms: <OS>
+#  Owner: Martin Denn
+#  Approval information: <reference>
+#  
+#  Version control
+#  1.0 - Martin Denn (Sonja Benz), 2015-07-16
+#  Initial Version
+#  IEM is usually run globally bei IBM, but with Allianz a dedicated IEM
+#  server is needed. Here we follow the rule from the global IEM servers
+#  were IEM administrators have full privileges
+#  1.1 - Sonja Benz (SME UNIX IAM), 2015-07-22
+#  Optional check for IBM compliancy resulted in minor modifications,
+#  e.g. IBM_NONE_SA was replaced by IBM_UNIX_SA_CMDS
+# 1.2 - Aurimas Nogis 2015-08-13
+# RBAC user IDs added (iemlls)
+# ==============================================================================
+# User Aliases
+# ============================================================================== 
+# CyberArk's list of shared IDs will be filled in User_Alias
+User_Alias  IBM_IEM_LLS_LCL = iemlls
+# ==============================================================================
+# Host Aliases
+# ==============================================================================
+Host_Alias  IBM_IEM_LCL_HOSTS = ALL
+# ==============================================================================
+# Command Aliases
+# ==============================================================================
+# Access Hierachy (high to low): LLS, ADM, OPS, RON
+# LLS: by default with root privileges as defined in Cmnd_Alias 'IBM_UNIX_SA_CMDS'
+# ADM: by default with higher privileges for a limited list of commands
+# OPS: by default only simple access w/o sudoers
+# RON: is rarely needed and stands for Readonly
+#
+Cmnd_Alias  IBM_IEM_LLS_CMND  = IBM_UNIX_SA_CMDS
+# For commands listed in Cmnd_Alias 'IBM_SHELLESCAPE_ALL' use these special ones:
+#Cmnd_Alias  IBM_IEM_ADM_NOEXEC_CMND  =
+# ==============================================================================
+# User Privilege Specifications
+# ==============================================================================
+# Specifications, if *NOEXEC* is not used:
+#
+IBM_IEM_LLS_LCL IBM_IEM_LCL_HOSTS = (root) NOPASSWD:IBM_IEM_LLS_CMND
+#      
+# Specifications, if *NOEXEC* is used :
+# 
+#IBM_IEM_LLS: has full privileges anyway, and is therefore not included here 
+#
+# End Customer specific 4xx_IEM_LCL template for ALZ
+# Ver 1.2 Date <2015-08-13> * CUSTOMER * Refer <ref no> End#

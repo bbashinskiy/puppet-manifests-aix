@@ -1,0 +1,6 @@
+var/log/faillog {
+        weekly
+        rotate 13
+        compress
+        create 0744 root root
+}

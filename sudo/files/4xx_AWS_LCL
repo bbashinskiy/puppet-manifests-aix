@@ -1,0 +1,67 @@
+#  End Customer specific 4xx_WME_LCL template for ALZ - 
+#  Ver 1.0 Date <2016-05-09> * CUSTOMER * Refer <ref no>  End #
+#
+#  Description: local include file 4xx_AWS_LCL
+#               Apache and IBM HTTP Server
+#  Software products and versions: Apache and IBM HTTP Server
+#  Supported OS platforms: AIX, Linux
+#  Owner: Marcin Nowakowski
+#  Approval information: <reference>
+#  
+#  Version control
+#  1.0 - Marcin Nowakowski / Aurimas Nogis, 2016-05-09
+#  Initial Version
+#
+# ==============================================================================
+# User Aliases
+# ============================================================================== 
+# CyberArk's list of shared IDs will be filled in User_Alias
+User_Alias  IBM_AWS_LLS_LCL = islls, iticlls
+User_Alias  IBM_AWS_ADM_LCL = isadmin
+# ==============================================================================
+# Host Aliases
+# ==============================================================================
+Host_Alias  IBM_AWS_LCL_HOSTS = ALL
+# ==============================================================================
+# Command Aliases
+# ==============================================================================
+# Access Hierachy (high to low): LLS, ADM, OPS, RON
+# LLS: by default with root privileges as defined in Cmnd_Alias 'IBM_UNIX_SA_CMDS'
+# ADM: by default with higher privileges for a limited list of commands
+# OPS: by default only simple access w/o sudoers
+# RON: is rarely needed and stands for Readonly
+#
+Cmnd_Alias  IBM_AWS_LLS_CMND  = IBM_UNIX_SA_CMDS
+Cmnd_Alias  IBM_AWS_ADM_CMND  = \
+    /bin/chown -R isadmin\:isadmin /etc/httpd, \
+    /bin/kill, \
+	/etc/init.d/httpd -v, \
+	/etc/init.d/httpd -l, \
+	/sbin/service httpd restart, \
+	/usr/sbin/apachectl status, \
+	/usr/sbin/apachectl start, \
+	/usr/sbin/apachectl stop, \
+	/usr/sbin/apachectl restart, \
+	/etc/init.d/apache2 status, \
+	/etc/init.d/apache2 start, \
+	/etc/init.d/apache2 stop, \
+	/etc/init.d/apache2 restart
+
+# For commands listed in Cmnd_Alias 'IBM_SHELLESCAPE_ALL' use these special ones:
+#Cmnd_Alias  IBM_AWS_ADM_NOEXEC_CMND  =
+# ==============================================================================
+# User Privilege Specifications
+# ==============================================================================
+# Specifications, if *NOEXEC* is not used:
+#
+IBM_AWS_LLS_LCL IBM_AWS_LCL_HOSTS = (root) NOPASSWD:IBM_AWS_LLS_CMND
+IBM_AWS_ADM_LCL IBM_AWS_LCL_HOSTS = (root) NOPASSWD:IBM_AWS_ADM_CMND,\
+      !IBM_SHELLESCAPE_ALL,!IBM_SHELLS_ALL,!IBM_NONE_ALL
+#      
+# Specifications, if *NOEXEC* is used :
+# 
+#IBM_AWS_LLS: has full privileges anyway, and is therefore not included here 
+#IBM_AWS_ADM_LCL IBM_AWS_LCL_HOSTS = (root) NOPASSWD:IBM_WME_ADM_CMND,\
+#      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR,NOPASSWD:NOEXEC:IBM_WME_ADM_NOEXEC_CMND
+# End Customer specific 4xx_WME_LCL template for ALZ - 
+# Ver 1.0 Date <2016-05-09> * CUSTOMER * Refer <ref no>  End #

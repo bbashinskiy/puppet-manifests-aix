@@ -1,0 +1,43 @@
+#!/bin/sh
+#
+tee="/usr/bin/tee"
+date="/bin/date"
+grep="/bin/grep"
+rm="/bin/rm"
+cat="/bin/cat"
+egrep="/bin/egrep"
+logrotate="/usr/sbin/logrotate"
+#
+LOG_FILE="/var/log/SHT_logrotate.status"
+#
+#-----------------------------------------------------------------#
+# Function logit                                                  #
+# Description        :                                            #
+#         This function log all Informations into the logfile     #
+#         and also echo to the screen                             #
+# Arguments          :                                            #
+#         $1 - information                                        #
+# Return codes       :                                            #
+#         0 - successful                                          #
+#-----------------------------------------------------------------#
+function logit {
+	echo $($date +"%b %d %T")   $1 | $tee -a $LOG_FILE 1>/dev/null 2>/dev/null
+	return 0
+}
+> $LOG_FILE
+$logrotate -d /etc/logrotate.conf 2>/tmp/logrotate.tmp 1>/dev/null
+EXITVALUE=$?
+if [ $EXITVALUE != 0 ]; then
+	logit "logrotate ERROR : ALERT exited abnormally with [$EXITVALUE]"
+else
+	$cat /tmp/logrotate.tmp |$egrep "^rotating|^error" |while read line
+	do
+		if [ "$(echo $line | $grep "^rotating")" == "" ]; then
+			logit "logrotate WARNING : $line"
+		else
+			logit "logrotate SUCCESS : $line"
+		fi
+	done
+fi
+$rm -f /tmp/logrotate.tmp
+exit 0

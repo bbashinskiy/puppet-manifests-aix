@@ -1,0 +1,50 @@
+#  End Customer specific 4xx_NET_LCL template for ALZ - 
+#  Ver 1.0 Date <2016-07-19> * CUSTOMER * Refer <ref no>  End #
+#
+#  Description: local include file 4xx_NET_LCL
+#               Network team tools
+#  Software products and versions: like DCNM
+#  Supported OS platforms: AIX, Linux
+#  Owner: Daniel Zukowski
+#  Approval information: <reference>
+#  
+#  Version control
+#  1.0 - Aurimas Nogis, 2015-07-19
+#  Initial Version
+# ==============================================================================
+# User Aliases
+# ============================================================================== 
+# CyberArk's list of shared IDs will be filled in User_Alias
+User_Alias  IBM_NET_LLS_LCL = netlls
+# ==============================================================================
+# Host Aliases
+# ==============================================================================
+Host_Alias  IBM_NET_LCL_HOSTS = ALL
+# ==============================================================================
+# Command Aliases
+# ==============================================================================
+# Access Hierachy (high to low): LLS, ADM, OPS, RON
+# LLS: by default with root privileges as defined in Cmnd_Alias 'IBM_UNIX_SA_CMDS'
+# ADM: by default with higher privileges for a limited list of commands
+# OPS: by default only simple access w/o sudoers
+# RON: is rarely needed and stands for Readonly
+#
+Cmnd_Alias  IBM_NET_LLS_CMND  = IBM_UNIX_SA_CMDS
+
+# For commands listed in Cmnd_Alias 'IBM_SHELLESCAPE_ALL' use these special ones:
+#Cmnd_Alias  IBM_NET_ADM_NOEXEC_CMND  =
+# ==============================================================================
+# User Privilege Specifications
+# ==============================================================================
+# Specifications, if *NOEXEC* is not used:
+#
+IBM_NET_LLS_LCL IBM_NET_LCL_HOSTS = (root) NOPASSWD:IBM_NET_LLS_CMND
+
+#      
+# Specifications, if *NOEXEC* is used :
+# 
+#IBM_NET_LLS: has full privileges anyway, and is therefore not included here 
+#IBM_NET_ADM_LCL IBM_NET_LCL_HOSTS = (root) NOPASSWD:IBM_NET_ADM_CMND,\
+#      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR,NOPASSWD:NOEXEC:IBM_NET_ADM_NOEXEC_CMND
+# End Customer specific 4xx_NET_LCL template for ALZ - 
+# Ver 1.0 Date <2016-07-19> * CUSTOMER * Refer <ref no>  End #

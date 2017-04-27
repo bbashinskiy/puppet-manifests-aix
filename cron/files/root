@@ -1,0 +1,59 @@
+# IBM_PROLOG_BEGIN_TAG 
+# This is an automatically generated prolog. 
+#  
+# bos610 src/bos/usr/sbin/cron/root 1.15.1.3 
+#  
+# Licensed Materials - Property of IBM 
+#  
+# COPYRIGHT International Business Machines Corp. 1989,1994 
+# All Rights Reserved 
+#  
+# US Government Users Restricted Rights - Use, duplication or 
+# disclosure restricted by GSA ADP Schedule Contract with IBM Corp. 
+#  
+# @(#)08	1.15.1.3  src/bos/usr/sbin/cron/root, cmdcntl, bos610 2/11/94 17:19:47
+# IBM_PROLOG_END_TAG 
+#
+# COMPONENT_NAME: (CMDCNTL) commands needed for basic system needs
+#
+# FUNCTIONS: 
+#
+# ORIGINS: 27
+#
+# (C) COPYRIGHT International Business Machines Corp. 1989,1994
+# All Rights Reserved
+# Licensed Materials - Property of IBM
+#
+# US Government Users Restricted Rights - Use, duplication or
+# disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+#
+#0 3 * * * /usr/sbin/skulker
+#45 2 * * 0 /usr/lib/spell/compress
+#45 23 * * * ulimit 5000; /usr/lib/smdemon.cleanu > /dev/null
+0 11 * * * /usr/bin/errclear -d S,O 30
+0 12 * * * /usr/bin/errclear -d H 90
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * /usr/sbin/dumpctrl -k >/dev/null 2>/dev/null
+0 15 * * *  /usr/lib/ras/dumpcheck >/dev/null 2>&1
+# TUAM client for AIX advance accounting
+59 * * * * /usr/local/tuam_leo_schedule.sh 1> /tmp/tuam_sched.log 2>&1
+7,37 * * * * ( /usr/bin/logger -p daemon.notice `date` SYSLOGHEARTBEAT ) >/dev/null 2>&1 #+#+#+#(make_cronentry) syslog_heartbeat
+30 1,5,9,13,17,21 * * * ( cd /opt/itlm/scripts; /usr/db/bin/perl ./TAD4DCron.pl -logf ) >/dev/null 2>&1 #+#+#+#(make_cronentry) TAD4D_CheckConfig
+20 * * * * ( /PowerHA/bin/cluster_sync_passwd.sh -update ) >/dev/null 2>&1 #+#+#+#(make_cronentry) PowerHA_PW_SYNC
+#9 6 * * * ( find /etc -name "sudoers_*" -mtime +14 | xargs rm ) >/dev/null 2>&1 #+#+#+#(make_cronentry) SUDO_cleanup
+# 30 19 * * * ( /applications/LDAPssh/CURRENT/scripts/update_ssh_keys.pl -delay ) >/dev/null 2>&1 #+#+#+#(make_cronentry) update_ssh_keys_withDelay
+0 3 * * * ( su - root -c /applications/logrotate/scripts/rotate_now.sh ) >/dev/null 2>&1 #+#+#+#(make_cronentry) logrotate
+#2 5 * * 1,4 ( /usr/db/RCM/Utility/cron_delay_wrapper.pl 180 hostid /applications/sudo/CURRENT/scripts/make_Sudo.pl ) >/dev/null 2>&1 #+#+#+#(make_cronentry) SUDO_update
+15 4 * * * ( /usr/db/RCM/Scripts/report_all_diffs.pl ) >/dev/null 2>&1 #+#+#+#(make_cronentry) rcm_diff_report
+10 0 * * 1 ( /usr/db/RCM/Utility/cron_delay_wrapper.pl 420 hostid /usr/db/RCM/bin/make_users.pl --cleanuponly ) >/dev/null 2>&1 #+#+#+#(make_cronentry) cleanup_obsolete_accounts
+34 0 * * * ( /applications/time/CURRENT/bin/check_time.pl ) >/dev/null 2>&1 #+#+#+#(make_cronentry) check_time
+30 19 * * 6 ( /PowerHA/bin/cr_ping_client_list.sh -delay ) >/dev/null 2>&1 #+#+#+#(make_cronentry) PowerHA_ARP_REFRESH
+30 23 * * 1 ( /usr/db/RCM/Utility/cron_delay_wrapper.pl 360 hostid /usr/db/RCM/Utility/itim_label.pl --upload ) >/dev/null 2>&1 #+#+#+#(make_cronentry) itim_label_rcopy
+15 5 * * * ( /usr/bin/logger -p daemon.info syslog is alive ) >/dev/null 2>&1 #+#+#+#(make_cronentry) sec_syslog_alive
+0 0 * * * /usr/es/sbin/cluster/utilities/clcycle 1>/dev/null 2>/dev/null # PowerHA SystemMirror Logfile rotation
+31 03 * * 00 /applications/sysbackup/do_mksysb -e >/dev/null 2>&1
+0 22 * * * (/applications/res/scripts/start_res_agent.sh -delay) >/dev/null 2>&1 #+#+#+#(make_cronentry) res_agent_automatic_start
+# -------- eregldap ASO tooling -----------
+32 4 * * 1,3 /opt/eregldap/uar/uar-bin/ereg_cleanupv3.pl >/dev/null 2>&1
+13,43 * * * * /opt/eregldap/uar/uar-bin/update_sshv4.pl >/dev/console 2>&1
+# --------- end eregldap ------------------
+55 23 * * * /var/perf/pm/bin/pmcfg >/dev/null 2>&1      #Enable PM Data Collection

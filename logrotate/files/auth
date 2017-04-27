@@ -1,0 +1,5 @@
+/var/log/auth.log {
+        weekly
+        rotate 13
+        compress
+}

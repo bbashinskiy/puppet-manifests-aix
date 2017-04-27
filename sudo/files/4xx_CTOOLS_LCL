@@ -1,0 +1,125 @@
+#  End Customer specific 4xx_CTOOLS_LCL template for ALZ - 
+#  Ver 1.3 Date <2016-05-03> * CUSTOMER * Refer <ref no>  End #
+#
+#  Description: local include file 4xx_CTOOLS_LCL
+#               CMS Cloud Tools Support
+#               Administrators supporting Cloud Tools:
+#				- Business Process Manager
+#				- Tools running on WebSphere Liberty Profile (SWIS, SAnD, CV...)
+#				- WebSphere Application Server, WebSphere Edge Load Balancer
+#				- Chef, CloudEx, DB2
+#
+#  Software products and versions: WebSphere AppServer+ND, 8.x, WebSphere
+#			Liberty Profile, Business Process Manager v8, WebSphere Edge,
+#			Chef, IBM DB2 10.x
+#  Supported OS platforms: AIX, Linux
+#  Owner: Mariusz Aksamitowski
+#  Approval information: <reference>
+#  
+#  Version control
+#  1.3 - cmschef priviledgs added (ID for CMS Chef access to managed VMs), Aurimas Nogis, 2016-05-03
+#  1.2 - Host set to ALL. Control is done from LDAP where we deply ctools* UIDs, 2016-04-07
+#  1.1 - Fixed commands for WebSphere Edge, Mariusz Aksamitowski, 2016-02-16
+#  1.0 - Initial version, Mariusz Aksamitowski, 2016-02-13
+#
+# RBAC user IDs added (ctoolslls, ctoolsadm)
+# ==============================================================================
+# User Aliases
+# ============================================================================== 
+# CyberArk's list of shared IDs will be filled in User_Alias
+User_Alias  IBM_CTOOLS_LLS_LCL = ctoolslls
+User_Alias  IBM_CTOOLS_ADM_LCL = ctoolsadm
+User_Alias  IBM_CTOOLS_OPS_LCL = ctoolsops
+User_Alias  IBM_CTOOLS_CMSCHEF_LCL = cmschef
+# ==============================================================================
+# Host Aliases
+# ==============================================================================
+Host_Alias  IBM_CTOOLS_LCL_HOSTS = ALL
+# ==============================================================================
+# Command Aliases
+# ==============================================================================
+# Access Hierachy (high to low): LLS, ADM, OPS, RON
+# LLS: by default with root privileges as defined in Cmnd_Alias 'IBM_UNIX_SA_CMDS'
+# ADM: by default with higher privileges for a limited list of commands
+# OPS: by default only simple access w/o sudoers
+# RON: is rarely needed and stands for Readonly
+#
+Cmnd_Alias  IBM_CTOOLS_LLS_CMND  = IBM_UNIX_SA_CMDS
+Cmnd_Alias  IBM_CTOOLS_ADM_CMND  = \
+			/sbin/service bpm*, \
+			/sbin/service resadapter*, \
+			/sbin/service edgeserver*, \
+			/sbin/service iptables*, \
+			!/sbin/service * /* , !/sbin/service *..* , \
+			/bin/chown -R wasadmin\:wasadmin /opt/ibm/BPM/[!..]*, \ 
+			/bin/chown -R wasadmin\:wasadmin /opt/ibm/Liberty/[!..]*, \
+			/bin/chown -R wasadmin\:wasadmin /opt/SAnD/[!..]*, \
+			!/*/chown*..*,!/*/chown *..*,!/*/chown *./*,!/*/chown *[\:space\:]/* *, \
+			/opt/IBM/HTTPServer/bin/apachectl start, \
+			/opt/IBM/HTTPServer/bin/apachectl stop, \
+			/opt/IBM/HTTPServer/bin/apachectl restart, \
+			/opt/IBM/HTTPServer/bin/adminctl start, \
+			/opt/IBM/HTTPServer/bin/adminctl stop, \
+			/opt/IBM/HTTPServer/bin/adminctl restart, \
+			/opt/IBM/HTTPServer/bin/versionInfo.sh, \
+			/opt/IBM/HTTPServer/bin/ikeyman, \
+			/opt/IBM/WebSphere/Plugins/bin/ikeyman.sh, \
+			/opt/IBM/WebSphere/Plugins/bin/versionInfo.sh, \
+			/opt/IBM/WebSphere/Plugins/bin/ConfigureIHSPlugin.sh, \
+			/etc/init.d/edgeserver *, \
+			/opt/IBM/WebSphere/Edge/ULB/ss/servers/bin/ssserver *, \
+			/opt/IBM/WebSphere/Edge/ULB/ss/servers/bin/sscontrol *, \
+			/home/db2inst1/sqllib/adm/db2start, \
+			/bin/su - wasadmin, \
+			/bin/su - db2evdce, \
+			/bin/su - db2cmslg, \
+			/bin/su - db2bpmc, \
+			/bin/su - db2soft, \
+			/bin/su - db2dro
+Cmnd_Alias  IBM_CTOOLS_OPS_CMND  = \
+			/opt/ibm/BPM/bin/startManager.sh, \
+			/opt/ibm/BPM/bin/startNode.sh, \
+			/opt/ibm/BPM/bin/startServer.sh, \
+			/opt/ibm/BPM/bin/syncNode.sh, \
+			/opt/ibm/BPM/bin/versionInfo.sh, \
+			/opt/ibm/BPM/bin/stopManager.sh, \
+			/opt/ibm/BPM/bin/stopNode.sh, \
+			/opt/ibm/BPM/bin/stopServer.sh, \
+			/opt/ibm/BPM/bin/BPMConfig.sh, \
+			/opt/ibm/BPM/bin/wsadmin.sh, \
+			/opt/ibm/BPM/bin/serverStatus.sh, \
+			/opt/ibm/BPM/bin/ikeyman.sh, \
+			/opt/ibm/BPM/bin/osgiCfgInit.sh, \
+			/opt/ibm/BPM/java/bin/keytool, \
+			/opt/ibm/Liberty/wlp/bin/productInfo, \
+			/opt/ibm/Liberty/java/bin/java, \
+			/opt/ibm/Liberty/java/bin/keytool, \
+			/opt/ibm/Liberty/java/bin/ikeyman, \
+			/opt/ibm/Liberty/jython/bin/, \
+			/opt/ibm/Liberty/jythonscripts/, \
+			/home/wasadmin/checkWLPServers.sh, \
+			/opt/ibm/Liberty/wlp/bin/server start*, \
+			/opt/ibm/Liberty/wlp/bin/server stop*, \
+			/opt/ibm/Liberty/wlp/bin/server status*
+Cmnd_Alias  IBM_CTOOLS_CMSCHEF_CMND = /bin/bash, /bin/chown, /bin/hostname, /bin/mkdir, /bin/rm, /bin/rmdir, /bin/tar, /bin/umount, /sbin/route, /usr/bin/whoami
+# For commands listed in Cmnd_Alias 'IBM_SHELLESCAPE_ALL' use these special ones:
+#Cmnd_Alias  IBM_CTOOLS_ADM_NOEXEC_CMND  =
+# ==============================================================================
+# User Privilege Specifications
+# ==============================================================================
+# Specifications, if *NOEXEC* is not used:
+#
+IBM_CTOOLS_LLS_LCL IBM_CTOOLS_LCL_HOSTS = (root) NOPASSWD:IBM_CTOOLS_LLS_CMND
+IBM_CTOOLS_ADM_LCL IBM_CTOOLS_LCL_HOSTS = (root) NOPASSWD:IBM_CTOOLS_ADM_CMND,\
+      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR
+IBM_CTOOLS_OPS_LCL IBM_CTOOLS_LCL_HOSTS = (wasadmin) NOPASSWD:IBM_CTOOLS_OPS_CMND,\
+      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR
+IBM_CTOOLS_CMSCHEF_LCL IBM_CTOOLS_LCL_HOSTS = NOPASSWD: IBM_CTOOLS_CMSCHEF_CMND
+#      
+# Specifications, if *NOEXEC* is used :
+# 
+#IBM_CTOOLS_LLS: has full privileges anyway, and is therefore not included here 
+#IBM_CTOOLS_ADM_LCL IBM_CTOOLS_LCL_HOSTS = (root) NOPASSWD:IBM_CTOOLS_ADM_CMND,\
+#      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR,NOPASSWD:NOEXEC:IBM_CTOOLS_ADM_NOEXEC_CMND
+# End Customer specific 4xx_CTOOLS_LCL template for ALZ - 
+# Ver 1.3 Date <2016-05-03> * CUSTOMER * Refer <ref no>  End #

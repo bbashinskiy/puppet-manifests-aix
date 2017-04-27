@@ -1,0 +1,64 @@
+## Begin Customer specific 4xx_LDAP_LCL template for ALZ - 
+# Ver 1.2 Date <2015-08-13> * CUSTOMER * Refer <ref no> End#
+#
+#  Description: local include file 4xx_LDAP_LCL
+#  Software products and versions: LDAP, <app_version>
+#  Supported OS platforms: <OS>
+#  Owner: undefined
+#  Approval information: <reference>
+#  
+#  Version control
+#  1.0 - Sonja Benz, 2015-07-16
+#  Initial Version
+#  This is an attempt from an "underdog" with LDAP knowledge to provide
+#  basic definitions
+#  1.1 - Sonja Benz (SME UNIX IAM), 2015-07-22
+#  Optional check for IBM compliancy resulted in minor modifications,
+#  e.g. IBM_NONE_SA was replaced by IBM_UNIX_SA_CMDS
+# 1.2 - Aurimas Nogis 2015-08-13
+# RBAC user IDs added (ldaplls, ldapadm)
+# ==============================================================================
+# User Aliases
+# ============================================================================== 
+# CyberArk's list of shared IDs will be filled in User_Alias
+User_Alias  IBM_LDAP_LLS_LCL = ldaplls
+User_Alias  IBM_LDAP_ADM_LCL = ldapadm
+# ==============================================================================
+# Host Aliases
+# ==============================================================================
+Host_Alias  IBM_LDAP_LCL_HOSTS = ALL
+# ==============================================================================
+# Command Aliases
+# ==============================================================================
+# Access Hierachy (high to low): LLS, ADM, OPS, RON
+# LLS: by default with root privileges as defined in Cmnd_Alias 'IBM_UNIX_SA_CMDS'
+# ADM: by default with higher privileges for a limited list of commands
+# OPS: by default only simple access w/o sudoers
+# RON: is rarely needed and stands for Readonly
+#
+Cmnd_Alias  IBM_LDAP_LLS_CMND  = IBM_UNIX_SA_CMDS
+Cmnd_Alias  IBM_LDAP_ADM_CMND  = /opt/ibm/ldap/V6*/sbin/, \
+                                 /opt/ibm/ldap/V6*/bin/, \
+                                 /etc/init.d/ibmslapd, \
+                                 /usr/sbin/rcibmslapd, \
+                                 /usr/bin/passwd ldapdb2, \
+                                 /usr/bin/su - ldapdb2
+# For commands listed in Cmnd_Alias 'IBM_SHELLESCAPE_ALL' use these special ones:
+#Cmnd_Alias  IBM_LDAP_ADM_NOEXEC_CMND  =
+# ==============================================================================
+# User Privilege Specifications
+# ==============================================================================
+# Specifications, if *NOEXEC* is not used:
+#
+IBM_LDAP_LLS_LCL IBM_LDAP_LCL_HOSTS = (root) NOPASSWD:IBM_LDAP_LLS_CMND
+IBM_LDAP_ADM_LCL IBM_LDAP_LCL_HOSTS = (root) NOPASSWD:IBM_LDAP_ADM_CMND,\
+      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR
+#      
+# Specifications, if *NOEXEC* is used :
+# 
+#IBM_LDAP_LLS: has full privileges anyway, and is therefore not included here 
+#IBM_LDAP_ADM_LCL IBM_LDAP_LCL_HOSTS = (root) NOPASSWD:IBM_LDAP_ADM_CMND,\
+#      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR,NOPASSWD:NOEXEC:IBM_LDAP_ADM_NOEXEC_CMND
+#
+# End Customer specific 4xx_LDAP_LCL template for ALZ
+# Ver 1.1 Date <2015-08-13> * CUSTOMER * Refer <ref no> End#

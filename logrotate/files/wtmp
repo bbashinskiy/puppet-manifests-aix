@@ -1,0 +1,7 @@
+/var/log/wtmp {
+        nocompress
+        monthly
+        create 0644 root utmp
+        minsize 1M
+        rotate 4
+}

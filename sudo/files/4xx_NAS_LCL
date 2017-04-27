@@ -1,0 +1,46 @@
+## Begin Customer specific 4xx_NAS_LCL template for ALZ - 
+# Ver 2.0 Date 2016-05-05 * CUSTOMER * Refer <ref no> End#
+#
+# Description: Sudoers file for NAS_LLS_XX_SMA_IMG group.
+# Software products and versions: n/a
+# Supported OS platforms: Linux
+# Owner: Mateusz Rebelinski (Created by: Grzegorz Szponar)
+# Approval information: <reference>
+#  
+# Version control
+# 2.0 - Grzegorz Szponar, 2016-05-05
+#   IBM_NAS_ADM_CMND commands rewritten
+# 1.0 - Grzegorz Szponar, 2016-04-28
+#    Initial Version
+#
+# ==============================================================================
+# User Aliases
+# ============================================================================== 
+# CyberArk's list of shared IDs will be filled in User_Alias
+User_Alias  IBM_NAS_LLS_LCL = naslls
+User_Alias  IBM_NAS_ADM_LCL = nasadm
+# ==============================================================================
+# Host Aliases
+# ==============================================================================
+Host_Alias  IBM_NAS_LCL_HOSTS = ALL
+# ==============================================================================
+# Command Aliases
+#				  
+#
+# Primary Cmnd_Alias
+#
+# Access Hierachy (high to low): LLS, ADM, OPS, RON
+# LLS: by default with root privileges as defined in Cmnd_Alias 'IBM_UNIX_SA_CMDS'
+# ADM: by default with higher privileges for a limited list of commands
+#
+Cmnd_Alias  IBM_NAS_LLS_CMND  = IBM_UNIX_SA_CMDS
+Cmnd_Alias  IBM_NAS_ADM_CMND  = /opt/netapp/snapcreator/*, /opt/netapp/scripts/*, /opt/netapp/reporting/*, /opt/netapp/alerting/*, /opt/IBMdfm/*, /opt/IBMdfm/bin/*, /opt/IBMdfm/sbin/*, /usr/sbin/unmount, /usr/sbin/mount, /usr/sbin/mount all, /usr/sbin/mount -o hard *, /usr/sbin/mount /*, /usr/sbin/mount -o soft *, /usr/sbin/mount -o ro /dev/cd0 /CDROM
+	
+# ==============================================================================
+# User Privilege Specifications
+# ==============================================================================
+IBM_NAS_LLS_LCL IBM_NAS_LCL_HOSTS = (root) NOPASSWD:IBM_NAS_LLS_CMND
+IBM_NAS_ADM_LCL IBM_NAS_LCL_HOSTS = (root) NOPASSWD:IBM_NAS_ADM_CMND,\
+      !IBM_SHELLESCAPE_ALL,!IBM_SHELLS_ALL,!IBM_NONE_ALL
+# End Customer specific 4xx_NAS_LCL template for ALZ - 
+# Ver 2.0 Date 2016-05-05 * CUSTOMER * Refer <ref no> End#

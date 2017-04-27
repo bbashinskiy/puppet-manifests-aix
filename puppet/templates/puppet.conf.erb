@@ -1,0 +1,13 @@
+[main]
+	user = puppet
+	group = puppet
+	report = true
+	reports = log,store
+	rundir = /var/run/puppet
+	
+[agent]
+	pluginsync = true
+	report = true
+	syslogfacility = local6
+	server = <%= scope.lookupvar('puppet::params::puppetserver') %>
+	environment = <%= scope.lookupvar('::environment') %>

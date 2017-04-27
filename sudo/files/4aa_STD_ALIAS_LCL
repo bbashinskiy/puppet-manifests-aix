@@ -1,0 +1,27 @@
+# Begin Customer specific 4aa_STD_ALIAS_LCL template for ALZ -
+# Ver 1.1  Date 2016-04-07  * CUSTOMER * Refer <ref no> End#
+#
+#
+# Version control
+# 1.1 - Aurimas Nogis 2016-04-07
+# !IBM_SHELLESCAPE_ALL and !IBM_NONE_ALL addedd to mitigate HC findings.
+# 1.0 - Sonja Benz 2015-08-28
+#   Initial version: adds customer specific aliases which are not
+#   found in 010_STD_ALIAS_GLB
+#------------------------------------------------------------------------------
+#
+# su commands
+#
+
+# Permit SA teams in addition to IBM_UNIX_SA_CMDS the execution 
+# of single command like sudo <cmnd>
+# Not switching to root, but only trigger a single command is supposed
+# to be more secure and reliable
+#
+Cmnd_Alias  IBM_UNIX_SA_ALZ_CMDS = ALL,!IBM_SHELLESCAPE_ALL,!IBM_NONE_ALL,IBM_UNIX_SA_CMDS
+
+#
+#------------------------------------------------------------------------------
+
+# End Customer specific 4aa_STD_ALIAS_LCL template for ALZ
+# Ver 1.1  Date 2016-04-07 * CUSTOMER * Refer <ref no> End#

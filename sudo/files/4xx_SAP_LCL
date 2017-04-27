@@ -1,0 +1,547 @@
+#  End Customer specific 4xx_SAP_LCL template for ALZ - 
+#  Ver 1.0 Date <2015-12-18> * CUSTOMER * Refer <ref no>  End #
+#
+#  Description: local include file 4xx_SAP_LCL
+#               Web Middleware Enablement
+#               Web Administrators supporting WebSphere Application Server etc.
+#  Software products and versions: WebSphere AppServer+ND, 8.x
+#  Supported OS platforms: AIX, Linux
+#  Owner: Thomas Seeling
+#  Approval information: <reference>
+#  
+#  Version control
+#  1.0 - Aurimas Nogis 2015-12-18
+#  Initial Version
+# ==============================================================================
+# User Aliases
+# ============================================================================== 
+# CyberArk's list of shared IDs will be filled in User_Alias
+User_Alias  IBM_SAP_LLS_LCL = pa000501, pa000502, pa000503
+User_Alias  IBM_SAP_ADM_LCL = pa000518, pa000519
+# ==============================================================================
+# Host Aliases
+# ==============================================================================
+Host_Alias  IBM_SAP_LCL_HOSTS = ALL
+# ==============================================================================
+# Command Aliases
+# ==============================================================================
+# Access Hierachy (high to low): LLS, ADM, OPS, RON
+# LLS: by default with root privileges as defined in Cmnd_Alias 'IBM_UNIX_SA_CMDS'
+# ADM: by default with higher privileges for a limited list of commands
+# OPS: by default only simple access w/o sudoers
+# RON: is rarely needed and stands for Readonly
+#
+Cmnd_Alias  IBM_SAP_LLS_CMND  = IBM_UNIX_SA_CMDS
+Cmnd_Alias  IBM_SAP_ADM_CMND  = \
+  /bin/su - agkadm,  /usr/bin/su - agkadm, \
+  /bin/su - bgkadm,  /usr/bin/su - bgkadm, \
+  /bin/su - oraagk,  /usr/bin/su - oraagk, \
+  /bin/su - orabgk,  /usr/bin/su - orabgk, \
+  /bin/su - asxadm,  /usr/bin/su - asxadm, \
+  /bin/su - oraasx,  /usr/bin/su - oraasx, \
+  /bin/su - asyadm,  /usr/bin/su - asyadm, \
+  /bin/su - oraasy,  /usr/bin/su - oraasy, \
+  /bin/su - aszadm,  /usr/bin/su - aszadm, \
+  /bin/su - oraasz,  /usr/bin/su - oraasz, \
+  /bin/su - db2eie,  /usr/bin/su - db2eie, \
+  /bin/su - db2eik,  /usr/bin/su - db2eik, \
+  /bin/su - db2jad,  /usr/bin/su - db2jad, \
+  /bin/su - db2jap,  /usr/bin/su - db2jap, \
+  /bin/su - jadadm,  /usr/bin/su - jadadm, \
+  /bin/su - japadm,  /usr/bin/su - japadm, \
+  /bin/su - fmsadm,  /usr/bin/su - fmsadm, \
+  /bin/su - db2fms,  /usr/bin/su - db2fms, \
+  /bin/su - orafms,  /usr/bin/su - orafms, \
+  /bin/su - db2ime,  /usr/bin/su - db2ime, \
+  /bin/su - imeadm,  /usr/bin/su - imeadm, \
+  /bin/su - orahrd,  /usr/bin/su - orahrd, \
+  /bin/su - hrdadm,  /usr/bin/su - hrdadm, \
+  /bin/su - orahrk,  /usr/bin/su - orahrk, \
+  /bin/su - hrkadm,  /usr/bin/su - hrkadm, \
+  /bin/su - orahrp,  /usr/bin/su - orahrp, \
+  /bin/su - hrpadm,  /usr/bin/su - hrpadm, \
+  /bin/su - orafrp,  /usr/bin/su - orafrp, \
+  /bin/su - ebhadm,  /usr/bin/su - ebhadm, \
+  /bin/su - oraebh,  /usr/bin/su - oraebh, \
+  /bin/su - frpadm,  /usr/bin/su - frpadm, \
+  /bin/su - tbiadm,  /usr/bin/su - tbiadm, \
+  /bin/su - tbladm,  /usr/bin/su - tbladm, \
+  /bin/su - tbuadm,  /usr/bin/su - tbuadm, \
+  /bin/su - tbvadm,  /usr/bin/su - tbvadm, \
+  /bin/su - tbzadm,  /usr/bin/su - tbzadm, \
+  /bin/su - oratbi,  /usr/bin/su - oratbi, \
+  /bin/su - oratbl,  /usr/bin/su - oratbl, \
+  /bin/su - oratbu,  /usr/bin/su - oratbu, \
+  /bin/su - oratbv,  /usr/bin/su - oratbv, \
+  /bin/su - oratbz,  /usr/bin/su - oratbz, \
+  /bin/su - aa1adm,  /usr/bin/su - aa1adm, \
+  /bin/su - aa2adm,  /usr/bin/su - aa2adm, \
+  /bin/su - abcadm,  /usr/bin/su - abcadm, \
+  /bin/su - abdadm,  /usr/bin/su - abdadm, \
+  /bin/su - abpadm,  /usr/bin/su - abpadm, \
+  /bin/su - abqadm,  /usr/bin/su - abqadm, \
+  /bin/su - ae1adm,  /usr/bin/su - ae1adm, \
+  /bin/su - ae2adm,  /usr/bin/su - ae2adm, \
+  /bin/su - agdadm,  /usr/bin/su - agdadm, \
+  /bin/su - agpadm,  /usr/bin/su - agpadm, \
+  /bin/su - agqadm,  /usr/bin/su - agqadm, \
+  /bin/su - agsadm,  /usr/bin/su - agsadm, \
+  /bin/su - ak1adm,  /usr/bin/su - ak1adm, \
+  /bin/su - am3adm,  /usr/bin/su - am3adm, \
+  /bin/su - ap1adm,  /usr/bin/su - ap1adm, \
+  /bin/su - ap2adm,  /usr/bin/su - ap2adm, \
+  /bin/su - ardadm,  /usr/bin/su - ardadm, \
+  /bin/su - arpadm,  /usr/bin/su - arpadm, \
+  /bin/su - arqadm,  /usr/bin/su - arqadm, \
+  /bin/su - aseadm,  /usr/bin/su - aseadm, \
+  /bin/su - asmadm,  /usr/bin/su - asmadm, \
+  /bin/su - baeadm,  /usr/bin/su - baeadm, \
+  /bin/su - bakadm,  /usr/bin/su - bakadm, \
+  /bin/su - bapadm,  /usr/bin/su - bapadm, \
+  /bin/su - basadm,  /usr/bin/su - basadm, \
+  /bin/su - batadm,  /usr/bin/su - batadm, \
+  /bin/su - bd1adm,  /usr/bin/su - bd1adm, \
+  /bin/su - bgdadm,  /usr/bin/su - bgdadm, \
+  /bin/su - bgpadm,  /usr/bin/su - bgpadm, \
+  /bin/su - bgqadm,  /usr/bin/su - bgqadm, \
+  /bin/su - bgsadm,  /usr/bin/su - bgsadm, \
+  /bin/su - bp1adm,  /usr/bin/su - bp1adm, \
+  /bin/su - bq1adm,  /usr/bin/su - bq1adm, \
+  /bin/su - caeadm,  /usr/bin/su - caeadm, \
+  /bin/su - cakadm,  /usr/bin/su - cakadm, \
+  /bin/su - capadm,  /usr/bin/su - capadm, \
+  /bin/su - casadm,  /usr/bin/su - casadm, \
+  /bin/su - catadm,  /usr/bin/su - catadm, \
+  /bin/su - daaadm,  /usr/bin/su - daaadm, \
+  /bin/su - dasbap,  /usr/bin/su - dasbap, \
+  /bin/su - daseie,  /usr/bin/su - daseie, \
+  /bin/su - daseik,  /usr/bin/su - daseik, \
+  /bin/su - daseip,  /usr/bin/su - daseip, \
+  /bin/su - dasffd,  /usr/bin/su - dasffd, \
+  /bin/su - dasfmd,  /usr/bin/su - dasfmd, \
+  /bin/su - dasfmp,  /usr/bin/su - dasfmp, \
+  /bin/su - dasfmq,  /usr/bin/su - dasfmq, \
+  /bin/su - dasime,  /usr/bin/su - dasime, \
+  /bin/su - dasimk,  /usr/bin/su - dasimk, \
+  /bin/su - dasimp,  /usr/bin/su - dasimp, \
+  /bin/su - dasle5,  /usr/bin/su - dasle5, \
+  /bin/su - daslk5,  /usr/bin/su - daslk5, \
+  /bin/su - daslp5,  /usr/bin/su - daslp5, \
+  /bin/su - dasmue,  /usr/bin/su - dasmue, \
+  /bin/su - dasmuk,  /usr/bin/su - dasmuk, \
+  /bin/su - dasmup,  /usr/bin/su - dasmup, \
+  /bin/su - daspad,  /usr/bin/su - daspad, \
+  /bin/su - daspap,  /usr/bin/su - daspap, \
+  /bin/su - daspaq,  /usr/bin/su - daspaq, \
+  /bin/su - daspat,  /usr/bin/su - daspat, \
+  /bin/su - dasphd,  /usr/bin/su - dasphd, \
+  /bin/su - dasphp,  /usr/bin/su - dasphp, \
+  /bin/su - dasphq,  /usr/bin/su - dasphq, \
+  /bin/su - dassd1,  /usr/bin/su - dassd1, \
+  /bin/su - dassd2,  /usr/bin/su - dassd2, \
+  /bin/su - dassd3,  /usr/bin/su - dassd3, \
+  /bin/su - dassd4,  /usr/bin/su - dassd4, \
+  /bin/su - dassre,  /usr/bin/su - dassre, \
+  /bin/su - dassrk,  /usr/bin/su - dassrk, \
+  /bin/su - dassrp,  /usr/bin/su - dassrp, \
+  /bin/su - dasve1,  /usr/bin/su - dasve1, \
+  /bin/su - dasvk1,  /usr/bin/su - dasvk1, \
+  /bin/su - dasvp1,  /usr/bin/su - dasvp1, \
+  /bin/su - dasxie,  /usr/bin/su - dasxie, \
+  /bin/su - dasxik,  /usr/bin/su - dasxik, \
+  /bin/su - dasxip,  /usr/bin/su - dasxip, \
+  /bin/su - db2bap,  /usr/bin/su - db2bap, \
+  /bin/su - db2eip,  /usr/bin/su - db2eip, \
+  /bin/su - db2ffd,  /usr/bin/su - db2ffd, \
+  /bin/su - db2fmd,  /usr/bin/su - db2fmd, \
+  /bin/su - db2fmp,  /usr/bin/su - db2fmp, \
+  /bin/su - db2fmq,  /usr/bin/su - db2fmq, \
+  /bin/su - db2imk,  /usr/bin/su - db2imk, \
+  /bin/su - db2imp,  /usr/bin/su - db2imp, \
+  /bin/su - db2le5,  /usr/bin/su - db2le5, \
+  /bin/su - db2lk5,  /usr/bin/su - db2lk5, \
+  /bin/su - db2lp5,  /usr/bin/su - db2lp5, \
+  /bin/su - db2mue,  /usr/bin/su - db2mue, \
+  /bin/su - db2muk,  /usr/bin/su - db2muk, \
+  /bin/su - db2mup,  /usr/bin/su - db2mup, \
+  /bin/su - db2pad,  /usr/bin/su - db2pad, \
+  /bin/su - db2pap,  /usr/bin/su - db2pap, \
+  /bin/su - db2paq,  /usr/bin/su - db2paq, \
+  /bin/su - db2pat,  /usr/bin/su - db2pat, \
+  /bin/su - db2phd,  /usr/bin/su - db2phd, \
+  /bin/su - db2php,  /usr/bin/su - db2php, \
+  /bin/su - db2phq,  /usr/bin/su - db2phq, \
+  /bin/su - db2sd1,  /usr/bin/su - db2sd1, \
+  /bin/su - db2sd2,  /usr/bin/su - db2sd2, \
+  /bin/su - db2sd3,  /usr/bin/su - db2sd3, \
+  /bin/su - db2sd4,  /usr/bin/su - db2sd4, \
+  /bin/su - db2sre,  /usr/bin/su - db2sre, \
+  /bin/su - db2srk,  /usr/bin/su - db2srk, \
+  /bin/su - db2srp,  /usr/bin/su - db2srp, \
+  /bin/su - db2srs,  /usr/bin/su - db2srs, \
+  /bin/su - db2ve1,  /usr/bin/su - db2ve1, \
+  /bin/su - db2vk1,  /usr/bin/su - db2vk1, \
+  /bin/su - db2vp1,  /usr/bin/su - db2vp1, \
+  /bin/su - db2xie,  /usr/bin/su - db2xie, \
+  /bin/su - db2xik,  /usr/bin/su - db2xik, \
+  /bin/su - db2xip,  /usr/bin/su - db2xip, \
+  /bin/su - db2ppd,  /usr/bin/su - db2ppd, \
+  /bin/su - db2ppq,  /usr/bin/su - db2ppq, \
+  /bin/su - db2ppp,  /usr/bin/su - db2ppp, \
+  /bin/su - ebaadm,  /usr/bin/su - ebaadm, \
+  /bin/su - ebiadm,  /usr/bin/su - ebiadm, \
+  /bin/su - ebkadm,  /usr/bin/su - ebkadm, \
+  /bin/su - ebmadm,  /usr/bin/su - ebmadm, \
+  /bin/su - ebpadm,  /usr/bin/su - ebpadm, \
+  /bin/su - ebsadm,  /usr/bin/su - ebsadm, \
+  /bin/su - ecaadm,  /usr/bin/su - ecaadm, \
+  /bin/su - eceadm,  /usr/bin/su - eceadm, \
+  /bin/su - eckadm,  /usr/bin/su - eckadm, \
+  /bin/su - ecmadm,  /usr/bin/su - ecmadm, \
+  /bin/su - ecpadm,  /usr/bin/su - ecpadm, \
+  /bin/su - ed1adm,  /usr/bin/su - ed1adm, \
+  /bin/su - eieadm,  /usr/bin/su - eieadm, \
+  /bin/su - eikadm,  /usr/bin/su - eikadm, \
+  /bin/su - eipadm,  /usr/bin/su - eipadm, \
+  /bin/su - ep1adm,  /usr/bin/su - ep1adm, \
+  /bin/su - eq1adm,  /usr/bin/su - eq1adm, \
+  /bin/su - ffdadm,  /usr/bin/su - ffdadm, \
+  /bin/su - ffsadm,  /usr/bin/su - ffsadm, \
+  /bin/su - fmdadm,  /usr/bin/su - fmdadm, \
+  /bin/su - fmpadm,  /usr/bin/su - fmpadm, \
+  /bin/su - fmqadm,  /usr/bin/su - fmqadm, \
+  /bin/su - gadadm,  /usr/bin/su - gadadm, \
+  /bin/su - gapadm,  /usr/bin/su - gapadm, \
+  /bin/su - gaqadm,  /usr/bin/su - gaqadm, \
+  /bin/su - gatadm,  /usr/bin/su - gatadm, \
+  /bin/su - gbpadm,  /usr/bin/su - gbpadm, \
+  /bin/su - gedadm,  /usr/bin/su - gedadm, \
+  /bin/su - gepadm,  /usr/bin/su - gepadm, \
+  /bin/su - geqadm,  /usr/bin/su - geqadm, \
+  /bin/su - getadm,  /usr/bin/su - getadm, \
+  /bin/su - grpadm,  /usr/bin/su - grpadm, \
+  /bin/su - imeadm,  /usr/bin/su - imeadm, \
+  /bin/su - imkadm,  /usr/bin/su - imkadm, \
+  /bin/su - impadm,  /usr/bin/su - impadm, \
+  /bin/su - jdiadm,  /usr/bin/su - jdiadm, \
+  /bin/su - le1adm,  /usr/bin/su - le1adm, \
+  /bin/su - le5adm,  /usr/bin/su - le5adm, \
+  /bin/su - lk1adm,  /usr/bin/su - lk1adm, \
+  /bin/su - lk5adm,  /usr/bin/su - lk5adm, \
+  /bin/su - lp1adm,  /usr/bin/su - lp1adm, \
+  /bin/su - lp2adm,  /usr/bin/su - lp2adm, \
+  /bin/su - lp5adm,  /usr/bin/su - lp5adm, \
+  /bin/su - ma2adm,  /usr/bin/su - ma2adm, \
+  /bin/su - mbdadm,  /usr/bin/su - mbdadm, \
+  /bin/su - mbpadm,  /usr/bin/su - mbpadm, \
+  /bin/su - mbqadm,  /usr/bin/su - mbqadm, \
+  /bin/su - md2adm,  /usr/bin/su - md2adm, \
+  /bin/su - me1adm,  /usr/bin/su - me1adm, \
+  /bin/su - mk1adm,  /usr/bin/su - mk1adm, \
+  /bin/su - mueadm,  /usr/bin/su - mueadm, \
+  /bin/su - mukadm,  /usr/bin/su - mukadm, \
+  /bin/su - mupadm,  /usr/bin/su - mupadm, \
+  /bin/su - ppdadm,  /usr/bin/su - ppdadm, \
+  /bin/su - ppqadm,  /usr/bin/su - ppqadm, \
+  /bin/su - pppadm,  /usr/bin/su - pppadm, \
+  /bin/su - oraaa1,  /usr/bin/su - oraaa1, \
+  /bin/su - oraaa2,  /usr/bin/su - oraaa2, \
+  /bin/su - oraabc,  /usr/bin/su - oraabc, \
+  /bin/su - oraabd,  /usr/bin/su - oraabd, \
+  /bin/su - oraabp,  /usr/bin/su - oraabp, \
+  /bin/su - oraabq,  /usr/bin/su - oraabq, \
+  /bin/su - oraae1,  /usr/bin/su - oraae1, \
+  /bin/su - oraae2,  /usr/bin/su - oraae2, \
+  /bin/su - oraagd,  /usr/bin/su - oraagd, \
+  /bin/su - oraagp,  /usr/bin/su - oraagp, \
+  /bin/su - oraagq,  /usr/bin/su - oraagq, \
+  /bin/su - oraags,  /usr/bin/su - oraags, \
+  /bin/su - oraak1,  /usr/bin/su - oraak1, \
+  /bin/su - oraam3,  /usr/bin/su - oraam3, \
+  /bin/su - oraap1,  /usr/bin/su - oraap1, \
+  /bin/su - oraap2,  /usr/bin/su - oraap2, \
+  /bin/su - oraard,  /usr/bin/su - oraard, \
+  /bin/su - oraarp,  /usr/bin/su - oraarp, \
+  /bin/su - oraarq,  /usr/bin/su - oraarq, \
+  /bin/su - oraase,  /usr/bin/su - oraase, \
+  /bin/su - oraasm,  /usr/bin/su - oraasm, \
+  /bin/su - orabae,  /usr/bin/su - orabae, \
+  /bin/su - orabak,  /usr/bin/su - orabak, \
+  /bin/su - orabap,  /usr/bin/su - orabap, \
+  /bin/su - orabas,  /usr/bin/su - orabas, \
+  /bin/su - orabat,  /usr/bin/su - orabat, \
+  /bin/su - orabd1,  /usr/bin/su - orabd1, \
+  /bin/su - orabgd,  /usr/bin/su - orabgd, \
+  /bin/su - orabgp,  /usr/bin/su - orabgp, \
+  /bin/su - orabgq,  /usr/bin/su - orabgq, \
+  /bin/su - orabgs,  /usr/bin/su - orabgs, \
+  /bin/su - orabp1,  /usr/bin/su - orabp1, \
+  /bin/su - orabq1,  /usr/bin/su - orabq1, \
+  /bin/su - oracae,  /usr/bin/su - oracae, \
+  /bin/su - oracak,  /usr/bin/su - oracak, \
+  /bin/su - oracap,  /usr/bin/su - oracap, \
+  /bin/su - oracas,  /usr/bin/su - oracas, \
+  /bin/su - oracat,  /usr/bin/su - oracat, \
+  /bin/su - oraeba,  /usr/bin/su - oraeba, \
+  /bin/su - oraebe,  /usr/bin/su - oraebe, \
+  /bin/su - oraebi,  /usr/bin/su - oraebi, \
+  /bin/su - oraebk,  /usr/bin/su - oraebk, \
+  /bin/su - oraebm,  /usr/bin/su - oraebm, \
+  /bin/su - oraebp,  /usr/bin/su - oraebp, \
+  /bin/su - oraebs,  /usr/bin/su - oraebs, \
+  /bin/su - oraeca,  /usr/bin/su - oraeca, \
+  /bin/su - oraece,  /usr/bin/su - oraece, \
+  /bin/su - oraeck,  /usr/bin/su - oraeck, \
+  /bin/su - oraecm,  /usr/bin/su - oraecm, \
+  /bin/su - oraecp,  /usr/bin/su - oraecp, \
+  /bin/su - oraed1,  /usr/bin/su - oraed1, \
+  /bin/su - oraep1,  /usr/bin/su - oraep1, \
+  /bin/su - oraeq1,  /usr/bin/su - oraeq1, \
+  /bin/su - oraffs,  /usr/bin/su - oraffs, \
+  /bin/su - orafmp,  /usr/bin/su - orafmp, \
+  /bin/su - orafmq,  /usr/bin/su - orafmq, \
+  /bin/su - oragad,  /usr/bin/su - oragad, \
+  /bin/su - oragap,  /usr/bin/su - oragap, \
+  /bin/su - oragaq,  /usr/bin/su - oragaq, \
+  /bin/su - oragat,  /usr/bin/su - oragat, \
+  /bin/su - oragbd,  /usr/bin/su - oragbd, \
+  /bin/su - oragbp,  /usr/bin/su - oragbp, \
+  /bin/su - oragbq,  /usr/bin/su - oragbq, \
+  /bin/su - oragbt,  /usr/bin/su - oragbt, \
+  /bin/su - oraged,  /usr/bin/su - oraged, \
+  /bin/su - oragep,  /usr/bin/su - oragep, \
+  /bin/su - orageq,  /usr/bin/su - orageq, \
+  /bin/su - oraget,  /usr/bin/su - oraget, \
+  /bin/su - oragrd,  /usr/bin/su - oragrd, \
+  /bin/su - oragrp,  /usr/bin/su - oragrp, \
+  /bin/su - oragrq,  /usr/bin/su - oragrq, \
+  /bin/su - oragrt,  /usr/bin/su - oragrt, \
+  /bin/su - oraimk,  /usr/bin/su - oraimk, \
+  /bin/su - oraimp,  /usr/bin/su - oraimp, \
+  /bin/su - orajdi,  /usr/bin/su - orajdi, \
+  /bin/su - orale1,  /usr/bin/su - orale1, \
+  /bin/su - oralk1,  /usr/bin/su - oralk1, \
+  /bin/su - oralk5,  /usr/bin/su - oralk5, \
+  /bin/su - oralp1,  /usr/bin/su - oralp1, \
+  /bin/su - oralp2,  /usr/bin/su - oralp2, \
+  /bin/su - oralp5,  /usr/bin/su - oralp5, \
+  /bin/su - orama2,  /usr/bin/su - orama2, \
+  /bin/su - orambd,  /usr/bin/su - orambd, \
+  /bin/su - orambp,  /usr/bin/su - orambp, \
+  /bin/su - orambq,  /usr/bin/su - orambq, \
+  /bin/su - oramd2,  /usr/bin/su - oramd2, \
+  /bin/su - orame1,  /usr/bin/su - orame1, \
+  /bin/su - oramk1,  /usr/bin/su - oramk1, \
+  /bin/su - oramuk,  /usr/bin/su - oramuk, \
+  /bin/su - oramup,  /usr/bin/su - oramup, \
+  /bin/su - orap45,  /usr/bin/su - orap45, \
+  /bin/su - orapap,  /usr/bin/su - orapap, \
+  /bin/su - orapaq,  /usr/bin/su - orapaq, \
+  /bin/su - orapat,  /usr/bin/su - orapat, \
+  /bin/su - orapd1,  /usr/bin/su - orapd1, \
+  /bin/su - oraped,  /usr/bin/su - oraped, \
+  /bin/su - orapee,  /usr/bin/su - orapee, \
+  /bin/su - orapep,  /usr/bin/su - orapep, \
+  /bin/su - orapeq,  /usr/bin/su - orapeq, \
+  /bin/su - orapet,  /usr/bin/su - orapet, \
+  /bin/su - orarbe,  /usr/bin/su - orarbe, \
+  /bin/su - orarbk,  /usr/bin/su - orarbk, \
+  /bin/su - orarbp,  /usr/bin/su - orarbp, \
+  /bin/su - oraso1,  /usr/bin/su - oraso1, \
+  /bin/su - oraso2,  /usr/bin/su - oraso2, \
+  /bin/su - oraso3,  /usr/bin/su - oraso3, \
+  /bin/su - oraso4,  /usr/bin/su - oraso4, \
+  /bin/su - orasrk,  /usr/bin/su - orasrk, \
+  /bin/su - orasrp,  /usr/bin/su - orasrp, \
+  /bin/su - oratbb,  /usr/bin/su - oratbb, \
+  /bin/su - oratbc,  /usr/bin/su - oratbc, \
+  /bin/su - oratbn,  /usr/bin/su - oratbn, \
+  /bin/su - oratbp,  /usr/bin/su - oratbp, \
+  /bin/su - oratrb,  /usr/bin/su - oratrb, \
+  /bin/su - oratrc,  /usr/bin/su - oratrc, \
+  /bin/su - oratrh,  /usr/bin/su - oratrh, \
+  /bin/su - oratrk,  /usr/bin/su - oratrk, \
+  /bin/su - oratrn,  /usr/bin/su - oratrn, \
+  /bin/su - oratrp,  /usr/bin/su - oratrp, \
+  /bin/su - oratrt,  /usr/bin/su - oratrt, \
+  /bin/su - oravk1,  /usr/bin/su - oravk1, \
+  /bin/su - oravp1,  /usr/bin/su - oravp1, \
+  /bin/su - oraxe3,  /usr/bin/su - oraxe3, \
+  /bin/su - oraxik,  /usr/bin/su - oraxik, \
+  /bin/su - oraxip,  /usr/bin/su - oraxip, \
+  /bin/su - oraxk3,  /usr/bin/su - oraxk3, \
+  /bin/su - oraxp3,  /usr/bin/su - oraxp3, \
+  /bin/su - orayad,  /usr/bin/su - orayad, \
+  /bin/su - orayap,  /usr/bin/su - orayap, \
+  /bin/su - orayaq,  /usr/bin/su - orayaq, \
+  /bin/su - oraybd,  /usr/bin/su - oraybd, \
+  /bin/su - p45adm,  /usr/bin/su - p45adm, \
+  /bin/su - padadm,  /usr/bin/su - padadm, \
+  /bin/su - papadm,  /usr/bin/su - papadm, \
+  /bin/su - paqadm,  /usr/bin/su - paqadm, \
+  /bin/su - patadm,  /usr/bin/su - patadm, \
+  /bin/su - pd1adm,  /usr/bin/su - pd1adm, \
+  /bin/su - pedadm,  /usr/bin/su - pedadm, \
+  /bin/su - peeadm,  /usr/bin/su - peeadm, \
+  /bin/su - pepadm,  /usr/bin/su - pepadm, \
+  /bin/su - peqadm,  /usr/bin/su - peqadm, \
+  /bin/su - petadm,  /usr/bin/su - petadm, \
+  /bin/su - phdadm,  /usr/bin/su - phdadm, \
+  /bin/su - phpadm,  /usr/bin/su - phpadm, \
+  /bin/su - phqadm,  /usr/bin/su - phqadm, \
+  /bin/su - rbeadm,  /usr/bin/su - rbeadm, \
+  /bin/su - rbkadm,  /usr/bin/su - rbkadm, \
+  /bin/su - rbpadm,  /usr/bin/su - rbpadm, \
+  /bin/su - sapadm,  /usr/bin/su - sapadm, \
+  /bin/su - sapbap,  /usr/bin/su - sapbap, \
+  /bin/su - sapeie,  /usr/bin/su - sapeie, \
+  /bin/su - sapeiedb,  /usr/bin/su - sapeiedb, \
+  /bin/su - sapeik,  /usr/bin/su - sapeik, \
+  /bin/su - sapeikdb,  /usr/bin/su - sapeikdb, \
+  /bin/su - sapeip,  /usr/bin/su - sapeip, \
+  /bin/su - sapeipdb,  /usr/bin/su - sapeipdb, \
+  /bin/su - sapffd,  /usr/bin/su - sapffd, \
+  /bin/su - sapffddb,  /usr/bin/su - sapffddb, \
+  /bin/su - sapfmd,  /usr/bin/su - sapfmd, \
+  /bin/su - sapfmp,  /usr/bin/su - sapfmp, \
+  /bin/su - sapfmq,  /usr/bin/su - sapfmq, \
+  /bin/su - sapfmx,  /usr/bin/su - sapfmx, \
+  /bin/su - sapime,  /usr/bin/su - sapime, \
+  /bin/su - sapimk,  /usr/bin/su - sapimk, \
+  /bin/su - sapimp,  /usr/bin/su - sapimp, \
+  /bin/su - sapimx,  /usr/bin/su - sapimx, \
+  /bin/su - saple5,  /usr/bin/su - saple5, \
+  /bin/su - saplk5,  /usr/bin/su - saplk5, \
+  /bin/su - saplp5,  /usr/bin/su - saplp5, \
+  /bin/su - saplx5,  /usr/bin/su - saplx5, \
+  /bin/su - sapmq,  /usr/bin/su - sapmq, \
+  /bin/su - sapmue,  /usr/bin/su - sapmue, \
+  /bin/su - sapmuk,  /usr/bin/su - sapmuk, \
+  /bin/su - sapmup,  /usr/bin/su - sapmup, \
+  /bin/su - sapmux,  /usr/bin/su - sapmux, \
+  /bin/su - sapmuxdb,  /usr/bin/su - sapmuxdb, \
+  /bin/su - sappad,  /usr/bin/su - sappad, \
+  /bin/su - sappaddb,  /usr/bin/su - sappaddb, \
+  /bin/su - sappap,  /usr/bin/su - sappap, \
+  /bin/su - sappaq,  /usr/bin/su - sappaq, \
+  /bin/su - sappat,  /usr/bin/su - sappat, \
+  /bin/su - sappax,  /usr/bin/su - sappax, \
+  /bin/su - sappaxdb,  /usr/bin/su - sappaxdb, \
+  /bin/su - sapphd,  /usr/bin/su - sapphd, \
+  /bin/su - sapphp,  /usr/bin/su - sapphp, \
+  /bin/su - sapphq,  /usr/bin/su - sapphq, \
+  /bin/su - sapphxdb,  /usr/bin/su - sapphxdb, \
+  /bin/su - sapr3,  /usr/bin/su - sapr3, \
+  /bin/su - sapsd1,  /usr/bin/su - sapsd1, \
+  /bin/su - sapsd1db,  /usr/bin/su - sapsd1db, \
+  /bin/su - sapsd2,  /usr/bin/su - sapsd2, \
+  /bin/su - sapsd2db,  /usr/bin/su - sapsd2db, \
+  /bin/su - sapsd3,  /usr/bin/su - sapsd3, \
+  /bin/su - sapsd3db,  /usr/bin/su - sapsd3db, \
+  /bin/su - sapsd4,  /usr/bin/su - sapsd4, \
+  /bin/su - sapsd4db,  /usr/bin/su - sapsd4db, \
+  /bin/su - sapsre,  /usr/bin/su - sapsre, \
+  /bin/su - sapsrk,  /usr/bin/su - sapsrk, \
+  /bin/su - sapsrp,  /usr/bin/su - sapsrp, \
+  /bin/su - sapsrx,  /usr/bin/su - sapsrx, \
+  /bin/su - saptrans,  /usr/bin/su - saptrans, \
+  /bin/su - sapve1,  /usr/bin/su - sapve1, \
+  /bin/su - sapvk1,  /usr/bin/su - sapvk1, \
+  /bin/su - sapvp1,  /usr/bin/su - sapvp1, \
+  /bin/su - sapxie,  /usr/bin/su - sapxie, \
+  /bin/su - sapxiedb,  /usr/bin/su - sapxiedb, \
+  /bin/su - sapxik,  /usr/bin/su - sapxik, \
+  /bin/su - sapxip,  /usr/bin/su - sapxip, \
+  /bin/su - sapxix,  /usr/bin/su - sapxix, \
+  /bin/su - sapxixdb,  /usr/bin/su - sapxixdb, \
+  /bin/su - sapppd,  /usr/bin/su - sapppd, \
+  /bin/su - sapppddb,  /usr/bin/su - sapppddb, \
+  /bin/su - sapppq,  /usr/bin/su - sapppq, \
+  /bin/su - sapppqdb,  /usr/bin/su - sapppqdb, \
+  /bin/su - sapppp,  /usr/bin/su - sapppp, \
+  /bin/su - sappppdb,  /usr/bin/su - sappppdb, \
+  /bin/su - sd1adm,  /usr/bin/su - sd1adm, \
+  /bin/su - sd2adm,  /usr/bin/su - sd2adm, \
+  /bin/su - sd3adm,  /usr/bin/su - sd3adm, \
+  /bin/su - sd4adm,  /usr/bin/su - sd4adm, \
+  /bin/su - smdadm,  /usr/bin/su - smdadm, \
+  /bin/su - smxadm,  /usr/bin/su - smxadm, \
+  /bin/su - so1adm,  /usr/bin/su - so1adm, \
+  /bin/su - so2adm,  /usr/bin/su - so2adm, \
+  /bin/su - so3adm,  /usr/bin/su - so3adm, \
+  /bin/su - so4adm,  /usr/bin/su - so4adm, \
+  /bin/su - sreadm,  /usr/bin/su - sreadm, \
+  /bin/su - srkadm,  /usr/bin/su - srkadm, \
+  /bin/su - srpadm,  /usr/bin/su - srpadm, \
+  /bin/su - srsadm,  /usr/bin/su - srsadm, \
+  /bin/su - tbbadm,  /usr/bin/su - tbbadm, \
+  /bin/su - tbcadm,  /usr/bin/su - tbcadm, \
+  /bin/su - tbnadm,  /usr/bin/su - tbnadm, \
+  /bin/su - tbpadm,  /usr/bin/su - tbpadm, \
+  /bin/su - trbadm,  /usr/bin/su - trbadm, \
+  /bin/su - trcadm,  /usr/bin/su - trcadm, \
+  /bin/su - trhadm,  /usr/bin/su - trhadm, \
+  /bin/su - trkadm,  /usr/bin/su - trkadm, \
+  /bin/su - trnadm,  /usr/bin/su - trnadm, \
+  /bin/su - trpadm,  /usr/bin/su - trpadm, \
+  /bin/su - trtadm,  /usr/bin/su - trtadm, \
+  /bin/su - ve1adm,  /usr/bin/su - ve1adm, \
+  /bin/su - vk1adm,  /usr/bin/su - vk1adm, \
+  /bin/su - vp1adm,  /usr/bin/su - vp1adm, \
+  /bin/su - xe3adm,  /usr/bin/su - xe3adm, \
+  /bin/su - xieadm,  /usr/bin/su - xieadm, \
+  /bin/su - xikadm,  /usr/bin/su - xikadm, \
+  /bin/su - xipadm,  /usr/bin/su - xipadm, \
+  /bin/su - xk3adm,  /usr/bin/su - xk3adm, \
+  /bin/su - xp3adm,  /usr/bin/su - xp3adm, \
+  /bin/su - yadadm,  /usr/bin/su - yadadm, \
+  /bin/su - yapadm,  /usr/bin/su - yapadm, \
+  /bin/su - yaqadm,  /usr/bin/su - yaqadm, \
+  /bin/su - ybdadm,  /usr/bin/su - ybdadm, \
+  /bin/su - wd3adm,  /usr/bin/su - wd3adm, \
+  /bin/su - orawd3,  /usr/bin/su - orawd3, \
+  /bin/su - wd4adm,  /usr/bin/su - wd4adm, \
+  /bin/su - orawd4,  /usr/bin/su - orawd4, \
+  /bin/su - wd5adm,  /usr/bin/su - wd5adm, \
+  /bin/su - orawd5,  /usr/bin/su - orawd5, \
+  /bin/su - bgwadm,  /usr/bin/su - bgwadm, \
+  /bin/su - orabgw,  /usr/bin/su - orabgw, \
+  /bin/su - agwadm,  /usr/bin/su - agwadm, \
+  /bin/su - oraagw,  /usr/bin/su - oraagw, \
+  /bin/su - db2pid,  /usr/bin/su - db2pid, \
+  /bin/su - pidadm,  /usr/bin/su - pidadm, \
+  /bin/su - agwadm,  /usr/bin/su - agwadm, \
+  /bin/su - oraagw,  /usr/bin/su - oraagw, \
+  /bin/su - bgwadm,  /usr/bin/su - bgwadm, \
+  /bin/su - orabgw,  /usr/bin/su - orabgw, \
+  /bin/su - bjdadm,  /usr/bin/su - bjdadm, \
+  /bin/su - orabjd,  /usr/bin/su - orabjd, \
+  /bin/su - bjkadm,  /usr/bin/su - bjkadm, \
+  /bin/su - orabjk,  /usr/bin/su - orabjk, \
+  /bin/su - bjqadm,  /usr/bin/su - bjqadm, \
+  /bin/su - orabjq,  /usr/bin/su - orabjq, \
+  /bin/su - bjsadm,  /usr/bin/su - bjsadm, \
+  /bin/su - orabjs,  /usr/bin/su - orabjs, \
+  /bin/su - bjpadm,  /usr/bin/su - bjpadm, \
+  /bin/su - orabjp,  /usr/bin/su - orabjp, \
+  /bin/su - gedadm,  /usr/bin/su - gedadm, \
+  /bin/su - oraged,  /usr/bin/su - oraged
+
+# For commands listed in Cmnd_Alias 'IBM_SHELLESCAPE_ALL' use these special ones:
+#Cmnd_Alias  IBM_SAP_ADM_NOEXEC_CMND  =
+# ==============================================================================
+# User Privilege Specifications
+# ==============================================================================
+# Specifications, if *NOEXEC* is not used:
+#
+IBM_SAP_LLS_LCL IBM_SAP_LCL_HOSTS = (root) NOPASSWD:IBM_SAP_LLS_CMND
+IBM_SAP_ADM_LCL IBM_SAP_LCL_HOSTS = (root) NOPASSWD:IBM_SAP_ADM_CMND,\
+      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR
+#      
+# Specifications, if *NOEXEC* is used :
+# 
+#IBM_SAP_LLS: has full privileges anyway, and is therefore not included here 
+#IBM_SAP_ADM_LCL IBM_SAP_LCL_HOSTS = (root) NOPASSWD:IBM_SAP_ADM_CMND,\
+#      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR,NOPASSWD:NOEXEC:IBM_SAP_ADM_NOEXEC_CMND
+# End Customer specific 4xx_SAP_LCL template for ALZ - 
+# Ver 1.0 Date <2015-12-18> * CUSTOMER * Refer <ref no>  End #

@@ -1,0 +1,14 @@
+/var/log/puppet/*log {
+    missingok
+    notifempty
+    create 0644 puppet puppet
+    sharedscripts
+    compress
+    daily
+    rotate 7
+    postrotate
+    	/bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+	/bin/kill -HUP `cat /var/run/rsyslogd.pid 2> /dev/null` 2> /dev/null || true
+    endscript
+}
+

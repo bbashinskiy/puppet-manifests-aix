@@ -1,0 +1,96 @@
+## Begin Customer specific 4xx_BCP_LCL template for ALZ - 
+# Ver 1.2 Date <2016-04-25> * CUSTOMER * Refer <ref no> End#
+#
+#  Description: local include file 4xx_BCP_LCL
+#  Software products and versions: BlueCARE Porrtal 9.0.3
+#  
+#  Supported OS platforms: AIX
+#  Owner: Michael Siegler
+#  Approval information: <reference>
+#  
+#  Version control
+#  1.2 - Aurimas Nogis 2015-04-25
+#  Changed BCPAPP to BCP to be consistent and remove visudo warnings
+#  1.1 - Aurimas Nogis, 2016-04-25
+#  Added !IBM_SHELLESCAPE_ALL,!IBM_SHELLS_ALL,!IBM_NONE_ALL,IBM_BCP_ADMSU_CMND, IBM_BCP_DB2SU_CMND
+#  1.0 - Michael Siegler, 2016-04-04
+#  Initial Version
+# ==============================================================================
+# User Aliases
+# ============================================================================== 
+# CyberArk's list of shared IDs will be filled in User_Alias
+User_Alias  IBM_BCP_LLS_LCL = bcplls
+User_Alias  IBM_BCP_ADM_LCL = bcpadm
+# ==============================================================================
+# Host Aliases
+# ==============================================================================
+Host_Alias  IBM_BCP_LCL_HOSTS = ALL
+# ==============================================================================
+# Command Aliases
+# ==============================================================================
+# Access Hierachy (high to low): LLS, ADM, OPS, RON
+# LLS: by default with root privileges as defined in Cmnd_Alias 'IBM_UNIX_SA_CMDS'
+# ADM: by default with higher privileges for a limited list of commands
+# OPS: by default only simple access w/o sudoers
+# RON: is rarely needed and stands for Readonly
+#
+Cmnd_Alias  IBM_BCP_LLS_CMND  = IBM_UNIX_SA_CMDS
+
+Cmnd_Alias  IBM_BCP_ADM_CMND  = /var/IBM/WebSphere/profiles/BCP/ctgAppSrv01/bin/stopServer.sh,\
+				/var/IBM/WebSphere/profiles/BCP/ctgAppSrv01/bin/startServer.sh,\
+				/var/IBM/WebSphere/profiles/BCP/ctgAppSrv01/bin/stopNode.sh,\
+				/var/IBM/WebSphere/profiles/BCP/ctgAppSrv01/bin/startNode.sh,\
+				/opt/IBM/WebSphere/BCP/AppServer/bin/stopServer.sh,\
+				/opt/IBM/WebSphere/BCP/AppServer/bin/startServer.sh,\
+				/opt/IBM/WebSphere/BCP/AppServer/bin/stopNode.sh,\
+				/opt/IBM/WebSphere/BCP/AppServer/bin/startNode.sh,\
+				/opt/IBM/WebSphere/BCP/install/stop-as.sh,\
+				/opt/IBM/WebSphere/BCP/install/start-as.sh,\
+				/usr/bin/kill,\
+				/usr/bin/chown -r bcpadmin.wasadmin /var/IBM/WebSphere/profiles/BCP,\
+				/usr/bin/chown -r bcpadmin.wasadmin /opt/IBM/WebSphere/BCP,\
+				/usr/bin/ps -ef
+
+Cmnd_Alias  IBM_BCP_ADMSU_CMND  =	/bin/su - bcpadmin,\
+				/usr/bin/su - bcpadmin,\
+				/bin/su bcpadmin,\
+				/usr/bin/su bcpadmin				
+				
+
+Cmnd_Alias  IBM_BCP_WAS_CMND  = sudoedit /var/IBM/WebSphere/profiles/BCP/ctgAppSrv01/[!'..']*/*.properties,\
+				sudoedit /var/IBM/WebSphere/profiles/BCP/ctgAppSrv01/[!'..']*/security.xml,\
+				sudoedit /var/IBM/WebSphere/profiles/BCP/ctgAppSrv01/[!'..']*/server.xml,\
+				sudoedit /var/IBM/WebSphere/profiles/BCP/ctgAppSrv01/[!'..']*/virtualhosts.xml,\
+				sudoedit /var/IBM/WebSphere/profiles/BCP/ctgAppSrv01/[!'..']*/serverindex.xml
+
+Cmnd_Alias  IBM_BCP_DB2_CMND  =	/home/bcdefr1/sqllib/db2profile,\
+				/home/client/sqllib/db2profile,\
+				/home/bcdefr1/sqllib/bin/db2,\
+				/home/client/sqllib/bin/db2
+
+Cmnd_Alias  IBM_BCP_DB2SU_CMND  = /bin/su - bcdefr1,\
+				/usr/bin/su - bcdefr1,\
+				/bin/su - client,\
+				/usr/bin/su - client				
+
+# For commands listed in Cmnd_Alias 'IBM_SHELLESCAPE_ALL' use these special ones:
+# Cmnd_Alias  IBM_BCP_ADM_NOEXEC_CMND  =
+# ==============================================================================
+# User Privilege Specifications
+# ==============================================================================
+# Specifications, if *NOEXEC* is not used:
+#
+IBM_BCP_LLS_LCL IBM_BCP_LCL_HOSTS = (root) NOPASSWD:IBM_BCP_LLS_CMND
+IBM_BCP_ADM_LCL IBM_BCP_LCL_HOSTS = (root) NOPASSWD:IBM_BCP_ADM_CMND,IBM_BCP_WAS_CMND,IBM_BCP_DB2_CMND,\
+				!IBM_SHELLESCAPE_ALL,!IBM_SHELLS_ALL,!IBM_NONE_ALL,\
+				IBM_BCP_ADMSU_CMND, IBM_BCP_DB2SU_CMND
+#      
+# Specifications, if *NOEXEC* is used :
+#
+############################################################################### 
+# Revision 1.0  2015-09-02 12:00  dey9b34t
+# Initial revision
+#
+###############################################################################
+# End Customer specific 4xx_BCP_LCL template for ALZ
+# Ver 1.2 Date <2016-04-25> * CUSTOMER * Refer <ref no> End#

@@ -1,0 +1,177 @@
+## Begin Customer specific 4xx_NCO_LCL template for ALZ
+# Ver 1.3 Date 2016-05-05 * CUSTOMER * Refer <ref no> End#
+#
+#  Description: local include file 4xx_NCO_LCL
+#               Generally used for Netcool env
+#  Software products and versions: Netcool 7.4
+#  Supported OS platforms: AIX, Linux
+#  Owner: Bartosz Buchta
+#  Approval information: <reference>
+#
+# Version control
+#  1.3 - Bartosz Buchta 2016-05-05
+#  Additionals commands included
+#  1.2 - Aurimas Nogis, 2016-04-29
+#  Rewrited to fit in format
+#  1.1 - Bartosz Buchta, 2016-04-22
+#  Second release
+#  1.0 - Bartosz Buchta, 2016-03-21
+#  Initial Version
+#
+# ==============================================================================
+# User Aliases
+# ============================================================================== 
+# CyberArk's list of shared IDs will be filled in User_Alias
+User_Alias  IBM_NCO_LLS_LCL = ncolls
+User_Alias  IBM_NCO_ADM_LCL = ncoadm
+User_Alias  IBM_NCO_NCOSYS_LCL = ncosys
+Runas_Alias IBM_NCO_NCOSYS_UIDS_LCL  = gsmalds\:ncoadmin, reporter\:ncoadmin
+# ==============================================================================
+# Host Aliases
+# ==============================================================================
+Host_Alias  IBM_NCO_LCL_HOSTS = ALL
+# ==============================================================================
+# Command Aliases
+# ==============================================================================
+# Access Hierachy (high to low): LLS, ADM, OPS, RON
+# LLS: by default with root privileges as defined in Cmnd_Alias 'IBM_UNIX_SA_CMDS'
+# ADM: by default with higher privileges for a limited list of commands
+# OPS: by default only simple access w/o sudoers
+# RON: is rarely needed and stands for Readonly
+#
+Cmnd_Alias  IBM_NCO_LLS_CMND  = IBM_UNIX_SA_CMDS			
+Cmnd_Alias  IBM_NCO_ADM_CMND  = \
+                /opt/IBM/tivoli/netcool/scripts/nco_pa.sh -c start, \
+				/opt/IBM/tivoli/netcool/scripts/nco_pa.sh -c status, \
+				/opt/IBM/tivoli/netcool/scripts/nco_pa.sh -c stop, \
+				/opt/IBM/tivoli/netcool/scripts/nco_pa.sh -c list, \
+				/opt/IBM/tivoli/netcool/scripts/nco_pa.sh -c startsvc -n *, \
+				/opt/IBM/tivoli/netcool/scripts/nco_pa.sh -c stopsvc -n *, \
+				/home/ncosys/scripts/, \
+				/home/ncosys/scripts/start_netcool_comp.sh, \
+				/home/ncosys/scripts/stop_netcool_comp.sh, \
+				/home/ncosys/scripts/db2client_to_GSMALDS.sh ,\
+				/home/ncosys/scripts/db2client_to_REPORTER.sh, \
+				/home/ncosys/scripts/update_GSMALDS_BCNotify_to_ZIS.sh , \
+				/home/gsmalds/scripts/,\
+				/home/reporter/scripts/, \
+				/opt/IBM/GSMA/LDS/bin/, \
+				/opt/IBM/tivoli/tipComponents/TCRComponent/bin/stopTCRserver.sh, \
+				/opt/IBM/tivoli/tipComponents/TCRComponent/bin/startTCRserver.sh, \
+				/opt/IBM/GSMA/*,\
+				/opt/IBM/tivoli/*,\
+				/opt/IBM/tivoli/netcool/omnibus/bin/nco_pad, \
+  				/opt/IBM/tivoli/netcool/omnibus/probes/aix*/nco_p_mttrapd, \
+  				/opt/IBM/tivoli/netcool/omnibus/probes/linux*/nco_p_mttrapd, \
+  				/opt/IBM/tivoli/netcool/omnibus/probes, \
+ 				/opt/IBM/tivoli/netcool/omnibus/probes/aix*/, \
+  				/opt/IBM/tivoli/netcool/omnibus/probes/linux*/, \
+  				/opt/IBM/tivoli/netcool/omnibus/probes, \
+  				/opt/IBM/tivoli/netcool/omnibus/platform/aix*/bin/, \
+  				/opt/IBM/tivoli/netcool/omnibus/platform/linux*/bin/, \
+  				/opt/IBM/tivoli/netcool/precision/bin/, \
+  				/opt/IBM/tivoli/netcool/precision/scripts/, \
+ 				/opt/IBM/tivoli/netcool/precision/scripts/perl/scripts/, \
+  				/opt/IBM/tivoli/netcool/precision/scripts/webtools/bin/, \
+  				/opt/IBM/tivoli/netcool/precision/platform/aix*/bin/, \
+  				/opt/IBM/tivoli/netcool/precision/platform/linux*/bin/, \
+  				/etc/init.d/nco, \
+  				/etc/rc.nco_pa, \
+  				/etc/rc.nco, \
+  				/etc/init/nis.conf, \
+  				/etc/rc.nci, \
+				/usr/bin/rpm, \
+  				/usr/bin/passwd ncosys, \
+  				/usr/bin/passwd reporter, \
+  				/usr/bin/passwd db2lds, \
+				/usr/bin/passwd db2tdw, \
+				/usr/bin/passwd gsmalds, \
+				/usr/bin/passwd db2hoe, \
+  				/usr/bin/passwd -u ncosys, \
+  				/usr/bin/passwd -u reporter, \
+  				/usr/bin/passwd -u db2lds, \
+				/usr/bin/passwd -u gsmalds, \
+  				/usr/bin/passwd -u db2tdw, \
+				/usr/bin/passwd -u db2hoe, \
+  				/usr/bin/chsec -f /etc/security/lastlog -a "unsuccessful_login_count=0" -s ncosys, \
+  				/usr/bin/chsec -f /etc/security/lastlog -a "unsuccessful_login_count=0" -s reporter, \	
+  				/usr/bin/chsec -f /etc/security/lastlog -a "unsuccessful_login_count=0" -s db2lds, \
+  				/usr/bin/chsec -f /etc/security/lastlog -a "unsuccessful_login_count=0" -s db2tdw, \
+				/usr/bin/chsec -f /etc/security/lastlog -a "unsuccessful_login_count=0" -s gsmalds, \
+				/usr/bin/chsec -f /etc/security/lastlog -a "unsuccessful_login_count=0" -s db2hoe, \
+ 				/usr/bin/chuser "account_locked=false" db2tdw, \
+  				/usr/bin/chuser "account_locked=false" ncosys, \
+  				/usr/bin/chuser "account_locked=false" reporter, \
+  				/usr/bin/chuser "account_locked=false" db2lds, \
+				/usr/bin/chuser "account_locked=false" gsmalds, \
+				/usr/bin/chuser "account_locked=false" db2hoe, \
+  				/etc/rc.d/rc5.d/S90ncp, \
+				/usr/bin/crontab -l, \
+  				/bin/kill, \
+  				/usr/bin/pkill, \
+  				/bin/env "", \
+  				/usr/bin/find, \	    
+  				/bin/ls, \
+  				sudoedit /etc/hosts, \
+  				/usr/bin/tail -f /opt/IBM/*, \
+  				/bin/tar -c* /tmp/*.tar /opt/Tivoli/*, \
+  				/bin/tar -x* /tmp/*.tar /tmp/*, \
+  				/bin/tar -x* /tmp/*.tar /opt/IBM/*, \
+  				/bin/tar -x* /tmp/*, \
+  				/bin/rm -r /opt/IBM/*, \
+  				/bin/rm -r /tmp/persistent_state, \
+  				/bin/rm -r /tmp/acsiTemp_ncosys, \
+  				/bin/rm -r /tmp/ismp00*, \
+ 				/bin/rm -r /tmp/javasharedresources, \
+  				/bin/chmod [0-7][0-7][0145] /opt/IBM/*,\
+  				/bin/chmod [0-7][0-7][0145] /home/ncosys/*,\
+  				/bin/chown ncosys\:ncoadmin /opt/IBM/*,\
+  				/bin/chown ncosys\:ncoadmin /home/ncosys/*,\
+  				/bin/chmod -R [0-7][0-7][0145] /opt/IBM/*,\
+  				/bin/chmod -R [0-7][0-7][0145] /home/ncosys/*,\
+  				/bin/chown -R ncosys\:ncoadmin /opt/IBM/*,\
+  				/bin/chown -R ncosys\:ncoadmin /home/ncosys/*,\
+  				/bin/cat /opt/IBM/*,\
+  				/bin/cat /home/ncosys/*,\
+  				/bin/cat /etc/inittab,\
+  				/usr/sbin/lsof,\
+  				/usr/sbin/iptrace,\
+  				/usr/sbin/tcpdump
+Cmnd_Alias  IBM_NCO_ADMSU_CMND  = \				
+  				/bin/su - ncosys, \
+  				/bin/su - db2lds, \
+  				/bin/su - db2tdw, \
+				/bin/su - reporter, \
+				/bin/su - gsmalds, \
+				/bin/su - db2hoe			
+Cmnd_Alias  IBM_NCO_NCOSYS_UIDS_CMND  =  /usr/bin/rpm
+Cmnd_Alias  IBM_NCO_NCOSYS_ROOT_CMND  = \				
+				/opt/IBM/GSMA/bin/, \
+				/home/ncosys/scripts/, \
+				/home/gsmalds/scripts/, \
+				/home/reporter/scripts/, \
+				/opt/IBM/GSMA/LDS/bin/
+#
+# For commands listed in Cmnd_Alias 'IBM_SHELLESCAPE_ALL' use these special ones:
+# Cmnd_Alias  IBM_NCO_ADM_NOEXEC_CMND  = 
+#
+# ==============================================================================
+# User Privilege Specifications
+# ==============================================================================
+# Specifications, if *NOEXEC* is not used:
+#
+IBM_NCO_LLS_LCL IBM_NCO_LCL_HOSTS = (root) NOPASSWD:IBM_NCO_LLS_CMND
+IBM_NCO_ADM_LCL IBM_NCO_LCL_HOSTS = (root) NOPASSWD:IBM_NCO_ADM_CMND,\
+		!IBM_SHELLESCAPE_ALL,!IBM_NONE_EDITOR,!IBM_SHELLS_ALL, IBM_NCO_ADMSU_CMND
+IBM_NCO_NCOSYS_LCL IBM_NCO_LCL_HOSTS=(IBM_NCO_NCOSYS_UIDS_LCL) NOPASSWD:IBM_NCO_NCOSYS_UIDS_CMND,\
+        !IBM_SHELLESCAPE_ALL,!IBM_NONE_EDITOR,!IBM_SHELLS_ALL
+IBM_NCO_NCOSYS_LCL IBM_NCO_LCL_HOSTS = (root) NOPASSWD:IBM_NCO_NCOSYS_ROOT_CMND,\
+        !IBM_SHELLESCAPE_ALL,!IBM_NONE_EDITOR,!IBM_SHELLS_ALL
+#      
+# Specifications, if *NOEXEC* is used :
+# 
+#IBM_NCO_LLS: has full privileges anyway, and is therefore not included here 
+#IBM_NCO_ADM_LCL IBM_NCO_LCL_HOSTS = (root) NOPASSWD:IBM_NCO_ADM_CMND,\
+#      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR,NOPASSWD:NOEXEC:IBM_NCO_ADM_NOEXEC_CMND
+# End Customer specific 4xx_NCO_LCL template for ALZ - 
+# Ver 1.3 Date 2016-05-05 * CUSTOMER * Refer <ref no> End#

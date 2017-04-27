@@ -1,0 +1,6 @@
+/var/log/tallylog {
+        weekly
+        rotate 13
+        compress
+        create 0600 root root
+}

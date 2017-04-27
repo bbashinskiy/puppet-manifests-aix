@@ -1,0 +1,111 @@
+## Begin Customer specific 4xx_ITM_LCL template for ALZ
+# Ver 1.5 Date 2016-04-25 * CUSTOMER * Refer <ref no> End#
+#
+#  Description: local include file 4xx_ITM_LCL
+#               Generally used for Discovery Services Administrators,
+#               e.g. ITM, ITNM, Netcool, TIP, and IBM Systems Director
+#  Software products and versions: ITM, Tivoli Monitoring v6
+#  Supported OS platforms: AIX, Linux
+#  Owner: Michael Schoen
+#  Approval information: <reference>
+#
+# Version control
+# 1.5 - Aurimas Nogis 2016-04-25
+# After HC finding IBM_ITM_ADM commands rewrited
+# 1.4 - Aurimas Nogis 2016-04-07
+# !IBM_SHELLESCAPE_ALL added for IBM_ITM_ADM after HC finding
+# 1.3 - Aurimas Nogis 2016-01-14
+# UIDs changes as documented (tivlls->itmlls, tivadm->itmadm)
+# 1.2 - Aurimas Nogis 2015-08-13
+# RBAC user IDs added (tivlls, tivadm)
+#  1.1 - Sonja Benz (SME UNIX IAM), 2015-07-22
+#  Optional check for IBM compliancy resulted in minor modifications,
+#  e.g. IBM_NONE_SA was replaced by IBM_UNIX_SA_CMDS
+# 2015-07-14 v0.5 Aurimas Nogis, Sonja Benz
+# Updated to latest template version
+# Deleted wildcard '*' at end of path (e.g. /opt/IBM/ITM/bin/)
+# added limited scope for sudoedit with wildcards ([!'..'])
+# replaced tvi by sudoedit
+# changed file name 414_TIVCLIENT_LCL to 4xx_ITM_LCL
+# 2015-04-15 v0.4
+# Commands sequence has been changed to enforce negations.
+# 2015-04-02 v0.3 - Negations fixed
+# Negations was changed to IBM_ALL_NEG for rules without ALL commands allowed
+# Alias name changed from ITM_LCL_HOSTS to IBM_ITM_LCL_HOSTS
+# 2015-03-26 v0.2 - File name change
+# File name changed from 414_ITM_LCL to 414_TIVCLIENT_LCL
+# 2015-03-25 v0.1 - Initial file created
+# New include file defined
+# ==============================================================================
+# User Aliases
+# ============================================================================== 
+# CyberArk's list of shared IDs will be filled in User_Alias
+User_Alias  IBM_ITM_LLS = itmlls
+User_Alias  IBM_ITM_ADM = itmadm
+Runas_Alias IBM_ITM_TIVMONIDS  = tivsup,itmuser
+# ==============================================================================
+# Host Aliases
+# ==============================================================================
+Host_Alias  IBM_ITM_LCL_HOSTS = ALL
+# ==============================================================================
+# Command Aliases
+# ==============================================================================
+# Access Hierachy (high to low): LLS, ADM, OPS, RON
+# LLS: by default with root privileges as defined in Cmnd_Alias 'IBM_UNIX_SA_CMDS'
+# ADM: by default with higher privileges for a limited list of commands
+# OPS: by default only simple access w/o sudoers
+# RON: is rarely needed and stands for Readonly
+#
+Cmnd_Alias  IBM_ITM_LLS_CMND  = IBM_UNIX_SA_CMDS
+Cmnd_Alias  IBM_ITM_ADM_CMND  = /opt/IBM/ITM/bin/,\
+                                /opt/IBM/ITM_A/bin/,\    
+                                /opt/IBM/ITM_B/bin/,\  
+                                /opt/IBM/ITM_C/bin/,\    
+                                /opt/IBM/ITM_D/bin/,\ 
+                                /opt/IBM/SPA/bin/,\
+                                /opt/IBM/WPA/bin/,\
+                                /opt/IBM/ITMAMC/bin/,\
+                                /opt/IBM/TEMS/bin/,\
+                                /opt/IBM/TEPS/bin/,\
+                                /opt/IBM/GWDOWN/bin/,\
+                                /opt/IBM/GWUP/bin/,\ 
+                                sudoedit /opt/IBM/SPA/config/[!'..']*,\
+                                sudoedit /opt/IBM/WPA/config/[!'..']*,\
+                                sudoedit /opt/IBM/ITM/config/[!'..']*,\
+                                sudoedit /opt/IBM/ITM_A/config/[!'..']*,\    
+                                sudoedit /opt/IBM/ITM_B/config/[!'..']*,\  
+                                sudoedit /opt/IBM/ITM_C/config/[!'..']*,\    
+                                sudoedit /opt/IBM/ITM_D/config/[!'..']*,\
+                                sudoedit /opt/IBM/ITMAMC/config/[!'..']*,\
+                                sudoedit /opt/IBM/TEMS/config/[!'..']*,\
+                                sudoedit /opt/IBM/TEPS/config/[!'..']*,\
+                                sudoedit /opt/IBM/GWDOWN/config/[!'..']*,\
+                                sudoedit /opt/IBM/GWUP/config/[!'..']*,\
+                                sudoedit /etc/rc.itm*,\
+                                /usr/bin/passwd itmuser,\
+                                /usr/bin/pwdadm -c itmuser
+# For commands listed in Cmnd_Alias 'IBM_SHELLESCAPE_ALL' use these special ones:
+# Cmnd_Alias  IBM_ITM_ADM_NOEXEC_CMND  =                                
+# ==============================================================================
+# User Privilege Specifications
+# ==============================================================================
+IBM_ITM_LLS IBM_ITM_LCL_HOSTS = (root) NOPASSWD:IBM_ITM_LLS_CMND
+IBM_ITM_ADM IBM_ITM_LCL_HOSTS = (IBM_ITM_TIVMONIDS) NOPASSWD: ALL, \
+	  !IBM_SHELLESCAPE_ALL,!IBM_SHELLS_ALL,!IBM_NONE_ALL
+IBM_ITM_ADM IBM_ITM_LCL_HOSTS = (root) NOPASSWD:IBM_ITM_ADM_CMND, \
+	  !IBM_SHELLESCAPE_ALL,!IBM_SHELLS_ALL,!IBM_NONE_ALL
+#
+# Specifications, if *NOEXEC* is not used:
+#
+# IBM_ITM_LLS_LCL IBM_ITM_LCL_HOSTS = (root) NOPASSWD:IBM_ITM_LLS_CMND
+# IBM_ITM_ADM_LCL IBM_ITM_LCL_HOSTS = (root) NOPASSWD:IBM_ITM_ADM_CMND,\
+#       !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR
+#      
+# Specifications, if *NOEXEC* is used :
+# 
+#IBM_ITM_LLS: has full privileges anyway, and is therefore not included here 
+#IBM_ITM_ADM_LCL IBM_ITM_LCL_HOSTS = (root) NOPASSWD:IBM_ITM_ADM_CMND,\
+#      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR,NOPASSWD:NOEXEC:IBM_ITM_ADM_NOEXEC_CMND
+#
+# End Customer specific 4xx_ITM_LCL template for ALZ - 
+# Ver 1.5 Date 2016-04-25 * CUSTOMER * Refer <ref no> End#

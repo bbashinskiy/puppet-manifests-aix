@@ -1,0 +1,227 @@
+## Begin Customer specific 4xx_TADDM_LCL template for ALZ - 
+# $Revision: 1.8 $ $Date: 2015-08-13 $ * CUSTOMER * Refer 4xx End#
+#
+#  Description: local include file 4xx_TADDM_LCL
+#               TADDM: roles for client and server
+#               TADDMA: role for server
+#  Software products and versions: TADDM 7.2
+#                                  TADDMA
+#  Supported OS platforms: AIX, SLES, RHEL
+#  Owner: Olav Wollrab
+#  Approval information: <reference>
+#  
+#  Version control -> see footer
+################################################################################
+# Working assumption
+#   This file contains sudo settings for two types of users.
+#     1. users used by Cyberark for interactive access to the systems
+#     2. users used by TADDM application to scan the systems
+#
+#   A user connecting via Cyberark to a system is logged on to that system
+#   with some dummy user. The GPAM definitions given below are for these
+#   dummy users on the system.
+#   TADDM uses SSH to connect to the systems.
+################################################################################
+# ==============================================================================
+# User Aliases
+# ============================================================================== 
+# CyberArk's list of shared IDs will be filled in User_Alias
+# service:TADDMC_ADM  -> Discovery Administrators supporting TADDM at a Client
+# service:TADDMS_ADM  -> Discovery Administrators supporting TADDM at a Server
+# service:TADDMA_ADM  -> Discovery Administrators supporting TADDM at an Anchor
+
+# GPAM - IBM_TADDMC_ADM_LCL 
+# is used by the TADDM support team on the scan targets to do a su - 
+# to the user, the application uses for scanning (IBM_TADDM_FAD_LCL) 
+# to do debugging. 
+# Usually, a TADDM support member has no need to interactively access the scan
+# targets. 
+User_Alias  IBM_TADDMC_ADM_LCL = ddmcadm
+
+# GPAM - IBM_TADDMS_ADM_LCL 
+# is used on the TADDM servers by the TADDM support team to administer 
+# the TADDM application. 
+User_Alias  IBM_TADDMS_ADM_LCL = ddmsadm
+
+# GPAM - IBM_TADDMA_ADM_LCL 
+# is used on the TADDM servers by the TADDM support team to administer 
+# the TADDM application. 
+User_Alias  IBM_TADDMA_ADM_LCL = ddmaadm
+
+# The users do not have a known password 
+#   => !authenticate
+# The TADDM application accesses the scan target without allocating a tty
+#   => !requiretty
+# SSH
+Defaults:IBM_TADDM_FAD_LCL !requiretty, !authenticate   # application to clients
+
+################################################################################
+# SSH - IBM_TADDM_FAD_LCL 
+# is used by the application to access the scan target using SSH. 
+# TADDM uses the OS commands to query configuration information. 
+# It parses the STDOUT of the commands and stores the results in the TADDM DB.
+# This user is also used to access the TADDM anchors.
+# Anchors are used as stepping stones behind firewalls. In addition to the
+# commands necessary for IBM_TADDM_FAD_LCL, on an Anchor, the nmap command
+# must be executable to the taddm scan user with root permission and the
+# related GPAM user must be able to kill failing nmap commands on the Anchor.
+# As long as there is no way to have this sudo configuration restricted to the
+# TADDM anchor systems, it is not necessary to distinguish between anchor and
+# scan target user here. So we have the permission to run nmap on all scan
+# targets even though, TADDM does it on the Anchors only.
+User_Alias  IBM_TADDM_FAD_LCL = taddm 
+
+# ==============================================================================
+# Host Aliases
+# ==============================================================================
+Host_Alias  IBM_TADDMC_LCL_HOSTS = ALL
+Host_Alias  IBM_TADDMS_LCL_HOSTS = ALL
+Host_Alias  IBM_TADDMA_LCL_HOSTS = ALL
+# ==============================================================================
+# Command Aliases
+# ==============================================================================
+# Access Hierachy (high to low): LLS, ADM, OPS, RON
+# LLS: by default with root privileges as defined in Cmnd_Alias 'IBM_UNIX_SA_CMDS'
+# ADM: by default with higher privileges for a limited list of commands
+# OPS: by default only simple access w/o sudoers
+# RON: is rarely needed and stands for Readonly
+#
+# TADDM application user for scanning using SSH
+Cmnd_Alias  IBM_TADDM_FAD_CMND  = \
+  /usr/bin/cksum, \
+  /usr/bin/crontab -l, \
+  /usr/bin/crontab -l *, \
+  /bin/df, \
+  /usr/bin/df, \
+  /usr/sbin/dmidecode, \
+  /usr/bin/entstat, \
+  /usr/sbin/entstat, \
+  /bin/ls, \
+  /usr/bin/ls, \
+  /usr/bin/lsof, \
+  /usr/sbin/lsof, \
+  /usr/local/bin/lsof, \
+  /usr/sbin/lswpar, \
+  /usr/sbin/lvdisplay, \
+  /usr/sbin/ndd, \
+  !/usr/sbin/ndd *-set*, \
+  /usr/bin/netstat, \
+  !/usr/bin/netstat *-Z*, \
+  /usr/sbin/netstat, \
+  !/usr/sbin/netstat *-Z*, \
+  /opt/IBM/taddm/nmap/*/nmap, \
+  /usr/bin/nmap, \
+  /usr/bin/pfiles, \
+  /usr/sbin/prtvtoc, \
+  /usr/sbin/pvdisplay, \
+  /usr/sbin/vgdisplay #, \
+# sha224:e40af288da1962dcb73902ae21a4115b03f2c0305ef8e99a38d95b82 /home/taddm/collectionengine-aix-powerpc, \
+# sha224:df18d6515e413fdc016919b7b192d057c5d53b117aae92ebc9b6d1af /home/taddm/collectionengine-hpux-parisc, \
+# sha224:280b5ec356169a6d623d22b13e30ceefd67d0b7723b280c71a05ccb5 /home/taddm/collectionengine-linux-x86, \
+# sha224:d43192b5f47f1a3b6d921c61d988233e0f47d64cab544f5b9ca30241 /home/taddm/collectionengine-solaris-sparc
+
+
+# On the TADDM servers, the TADDM administrators must be able to access all
+# the files belonging to the TADDM installation. Some files are created by
+# commands running with root privileges (e.g. lsof or nmap) and create files
+# in the TADDM installation.
+Cmnd_Alias  IBM_TADDMS_ADM_CMND  = \
+  /bin/su - taddmsrv, \
+  /usr/bin/su - taddmsrv, \
+  /usr/bin/chown -r taddmsrv /opt/IBM/taddm, \
+  /bin/su - taddm, \
+  /usr/bin/su - taddm, \
+  /usr/bin/chown -r taddm /home/taddm, \
+  /bin/passwd cmdb1 *, \
+  /usr/bin/passwd cmdb1 *, \
+  /bin/passwd cmdb2 *, \
+  /usr/bin/passwd cmdb2 *
+
+# The TADDM support must be able to su - to the TADDM scan user on the scan
+# targets and TADDM Anchors for debugging.
+Cmnd_Alias  IBM_TADDMC_ADM_CMND = \
+  /bin/su - taddm, \
+  /usr/bin/su - taddm, \
+  /usr/bin/chown -r taddm /home/taddm
+
+Cmnd_Alias  IBM_TADDMA_ADM_CMND  = \
+  /bin/su - taddm, \
+  /usr/bin/su - taddm, \
+  /usr/bin/chown -r taddm /home/taddm, \
+  /usr/bin/pkill * nmap, \
+  !/usr/bin/pkill *-v* nmap
+
+# For commands listed in Cmnd_Alias 'IBM_SHELLESCAPE_ALL' use these special ones:
+#Cmnd_Alias  IBM_TADDMC_ADM_NOEXEC_CMND  =
+#Cmnd_Alias  IBM_TADDMS_ADM_NOEXEC_CMND  =
+#Cmnd_Alias  IBM_TADDMA_ADM_NOEXEC_CMND  =
+# ==============================================================================
+# User Privilege Specifications
+# ==============================================================================
+# Specifications, if *NOEXEC* is not used:
+#
+# Note: IBM_TADDM_FAD_LCL needs nopasswd and norequiretty which is set using
+#       a Defaults: directive (see above).
+IBM_TADDM_FAD_LCL  IBM_TADDMC_LCL_HOSTS = (root) IBM_TADDM_FAD_CMND,\
+      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR
+
+IBM_TADDMC_ADM_LCL IBM_TADDMC_LCL_HOSTS = (root) NOPASSWD:IBM_TADDMC_ADM_CMND,\
+      IBM_TADDM_FAD_CMND,\
+      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR
+IBM_TADDMS_ADM_LCL IBM_TADDMS_LCL_HOSTS = (root) NOPASSWD:IBM_TADDMS_ADM_CMND,\
+      IBM_TADDM_FAD_CMND,\
+      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR
+IBM_TADDMA_ADM_LCL IBM_TADDMA_LCL_HOSTS = (root) NOPASSWD:IBM_TADDMA_ADM_CMND,\
+      IBM_TADDM_FAD_CMND,\
+      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR
+#      
+# Specifications, if *NOEXEC* is used :
+# 
+#IBM_TADDMC_ADM_LCL IBM_TADDMC_LCL_HOSTS = (root) NOPASSWD:IBM_TADDMC_ADM_CMND,\
+#      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR,NOPASSWD:NOEXEC:IBM_TADDMC_ADM_NOEXEC_CMND
+#IBM_TADDMS_ADM_LCL IBM_TADDMS_LCL_HOSTS = (root) NOPASSWD:IBM_TADDMS_ADM_CMND,\
+#      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR,NOPASSWD:NOEXEC:IBM_TADDMS_ADM_NOEXEC_CMND
+#IBM_TADDMA_ADM_LCL IBM_TADDMA_LCL_HOSTS = (root) NOPASSWD:IBM_TADDMA_ADM_CMND,\
+#      !IBM_UNIX_SA_CMDS,!IBM_SHELLS_ALL,!IBM_NONE_EDITOR,NOPASSWD:NOEXEC:IBM_TADDMA_ADM_NOEXEC_CMND
+#
+################################################################################
+# $Log: 4xx_TADDM_LCL,v $
+# Revision 1.8 - Aurimas Nogis 2015-08-13
+# RBAC user IDs added (ddmcadm, ddmsadm, ddmaadm)
+#
+# Revision 1.7  2015-07-30
+# * Update from Sonja Benz
+# Changed naming of Host_Alias, added prefix IBM
+#
+# Revision 1.6  2015-07-30 15:30:40+00  de139266
+# * Sun is not supported so far at Allianz. Related command removed.
+# * DB2 database users have shell /bin/false to be compliant.
+#   So it is not possible to su to these users.
+#   To support password management as a shared user, passwd command added.
+#
+# Revision 1.5  2015-07-30 11:41:32+00  de139266
+# * Hashes commented.
+#   For now, different versions of the file for the different operating systems
+#   are not accepted.
+#
+# Revision 1.4  2015-07-27 18:41:08+00  de139266
+# * Update from Sonja Benz.
+# * Hashes removed. Will not persist as it is a security issue.
+# * Command alias cleanup.
+#
+# Revision 1.3  2015-07-24 10:36:35+00  de139266
+# * File renamed from 4xx_TADALL_LCL to 4xx_TADDM_LCL. It no longer contains
+#   directives for TAD4D.
+# * Commented directives related to TAD4D are removed.
+# * Some missing commas added.
+#
+# Revision 1.2  2015-07-23 12:18:54+00  de139266
+# * Still not tested but with a better understanding, how Cyberark works.
+#
+# Revision 1.1  2015-07-20 11:57:22+00  de139266
+# Initial revision
+#
+################################################################################
+# 
+# End Customer specific 4xx_TADDM_LCL template for ALZ
+# Ver 1.8 Date <2015-08-13> * CUSTOMER * Refer <ref no>  End #

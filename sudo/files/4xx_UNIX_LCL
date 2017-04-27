@@ -1,0 +1,120 @@
+## Begin Customer specific 4xx_UNIX_LCL template for ALZ - 
+# Ver 1.6 Date 2016-04-25 * CUSTOMER * Refer <ref no> End#
+#
+# Description: local include file 4xx_UNIX_LCL
+#              Replacement of global 010_STD_SA_GLB
+# Software products and versions: n/a
+# Supported OS platforms: UNIX, AIX, Linux
+# Owner: Gerhard Possler (Created by: Sonja Benz)
+# Approval information: <reference>
+#  
+# Version control
+# 1.0 - Sonja Benz, 2015-06-24
+#    Initial Version with Cmnd_Alias mainly from CMS
+# 1.1 - Sonja Benz (SME UNIX IAM), 2015-07-22
+# Optional check for IBM compliancy resulted in minor modifications,
+# e.g. IBM_NONE_SA was replaced by IBM_UNIX_SA_CMDS
+# 1.2 - Sonja Benz 2015-07-22
+# Added Install ID's: iinstall, cinstall standard CMS users
+# 1.3 - Aurimas Nogis 2015-08-13
+# RBAC user IDs added (oslls, osadm, osops, osboard)
+# 1.4 - Sonja Benz 2015-08-28
+# Changed LLS access by new IBM_UNIX_SA_ALZ_CMDS which allows executing ALL
+# 1.5 - Aurimas Nogis 2016-04-06
+# After HC finding command /usr/bin/smitty print is commented
+# 1.6 - Aurimas Nogis 2016-04-25
+# After HC finding Cmnd_Alias IBM_UNIX_LLS_CMN and IBM_UNIX_ADM_LCL commands rewrited
+# iinstall and cinstall commented as these UIDs are not used
+#
+# ==============================================================================
+# User Aliases
+# ============================================================================== 
+# CyberArk's list of shared IDs will be filled in User_Alias
+# *OPS* is included for documentation, but no sudoers are defined for it 
+#User_Alias  IBM_UNIX_LLS_LCL = pa000001, pa000002, pa000003, pa000004, pa000005
+User_Alias  IBM_UNIX_LLS_LCL = oslls
+#User_Alias  IBM_UNIX_ADM_LCL = pa000020, pa000021, pa000022, pa000023, pa000024, pa000025, pa000026, pa000027, pa000028, pa000029
+User_Alias  IBM_UNIX_ADM_LCL = osadm
+#User_Alias  IBM_UNIX_OPS_LCL = pa000050, pa000051, pa000052, pa000053, pa000054
+#User_Alias  IBM_UNIX_OPS_LCL = osops
+#User_Alias  IBM_UNIX_BOARD_LCL = pa000100, pa000101, pa000102, pa000103, pa000104
+User_Alias  IBM_UNIX_BOARD_LCL = osboard
+# In addition the shared IDs iinstall and cinstall are 
+# used for install purposes
+# ==============================================================================
+# Host Aliases
+# ==============================================================================
+Host_Alias  IBM_UNIX_LCL_HOSTS = ALL
+# ==============================================================================
+# Command Aliases
+# ==============================================================================
+# Secondary Cmnd_Alias
+#
+Cmnd_Alias  IBM_UNIX_HOST_CMND    = sudoedit /etc/hosts
+Cmnd_Alias  IBM_UNIX_PRINTER_CMND = /usr/bin/lp,\
+                      /usr/bin/lpstat,\
+                      /usr/sbin/lpadmin,\
+                      /usr/sbin/chvirprt,\
+                      /usr/bin/enable,\
+                      /usr/bin/cancel,\
+                      /usr/lib/lpd/pio/etc/,\
+                      /usr/sbin/prtconf,\
+                      /usr/bin/jetadmin
+# IBM not allowed command                      /usr/bin/smitty print,\					  
+Cmnd_Alias  IBM_UNIX_LSUSER_CMND  = /usr/sbin/lsuser
+Cmnd_Alias  IBM_UNIX_OSPERF_CMND  = /bin/top, /usr/bin/top,\
+                      /bin/sar,/usr/sbin/sar,/usr/sbin/sar *,\
+                      /usr/bin/topas,\
+                      /usr/bin/tprof,\
+                      /usr/bin/filemon,/usr/bin/filemon *,\
+                      /usr/bin/trcstop,\
+                      /usr/samples/kernel/vmtune,\
+                      /usr/sbin/aioo, /usr/sbin/aioo *,\
+                      /usr/sbin/ioo, /usr/sbin/ioo *,\
+                      /usr/sbin/vmo, /usr/sbin/vmo *,\
+                      /usr/bin/svmon,\
+                      /usr/bin/entstat,\
+                      /usr/sbin/entstat,\
+                      /usr/bin/vmstat,\
+                      /usr/bin/iostat,\
+                      /usr/bin/nmon
+Cmnd_Alias  IBM_UNIX_STOP_CMND    = /usr/bin/stop
+Cmnd_Alias  IBM_UNIX_REBOOT_CMND  = /usr/sbin/shutdown -F, /usr/sbin/shutdown -Fr, /usr/sbin/reboot
+Cmnd_Alias  IBM_UNIX_MOUNTFS_CMND = /usr/sbin/unmount,\
+                      !/usr/sbin/mount,\
+                      !/usr/sbin/mount -o hard *,\
+                      /usr/sbin/mount /* ,\
+                      /usr/sbin/mount all,\
+                      /usr/sbin/mount -o soft *,\
+                      /usr/sbin/mount -o ro /dev/cd0 /CDROM
+Cmnd_Alias  IBM_UNIX_LISTEMGR_CMND = /usr/sbin/emgr -l
+Cmnd_Alias  IBM_UNIX_NET_CMND     = /usr/sbin/no
+Cmnd_Alias  IBM_UNIX_DATE_CMND    = /usr/bin/date
+#
+# Primary Cmnd_Alias
+#
+# Access Hierachy (high to low): LLS, ADM, OPS, RON
+# LLS: by default with root privileges as defined in Cmnd_Alias 'IBM_UNIX_SA_CMDS'
+# ADM: by default with higher privileges for a limited list of commands
+# OPS: by default only simple access w/o sudoers
+# RON: is rarely needed and stands for Readonly
+# BOARD: is a special role, not found in other service sudoers definitions
+#
+Cmnd_Alias  IBM_UNIX_LLS_CMND  = IBM_UNIX_SA_ALZ_CMDS
+Cmnd_Alias  IBM_UNIX_ADM_CMND  = IBM_UNIX_HOST_CMND, IBM_UNIX_PRINTER_CMND,\
+      IBM_UNIX_LSUSER_CMND, IBM_UNIX_OSPERF_CMND,  IBM_UNIX_STOP_CMND, \
+      IBM_UNIX_REBOOT_CMND, IBM_UNIX_MOUNTFS_CMND, IBM_UNIX_LISTEMGR_CMND, \
+      IBM_UNIX_NET_CMND, IBM_UNIX_DATE_CMND
+Cmnd_Alias  IBM_UNIX_BOARD_CMND  = IBM_UNIX_SA_CMDS
+# ==============================================================================
+# User Privilege Specifications
+# ==============================================================================
+IBM_UNIX_LLS_LCL IBM_UNIX_LCL_HOSTS = (root) NOPASSWD:IBM_UNIX_LLS_CMND
+IBM_UNIX_ADM_LCL IBM_UNIX_LCL_HOSTS = (root) NOPASSWD:IBM_UNIX_ADM_CMND,\
+      !IBM_SHELLESCAPE_ALL,!IBM_SHELLS_ALL,!IBM_NONE_ALL
+IBM_UNIX_BOARD_LCL IBM_UNIX_LCL_HOSTS = (root) NOPASSWD:IBM_UNIX_BOARD_CMND
+# Install ID's
+# iinstall ALL = (root) NOPASSWD:IBM_UNIX_SA_CMDS
+# cinstall ALL = (root) NOPASSWD:IBM_UNIX_SA_CMDS
+# End Customer specific 4xx_UNIX_LCL template for ALZ - 
+# Ver 1.6 Date 2016-04-25 * CUSTOMER * Refer <ref no> End#
