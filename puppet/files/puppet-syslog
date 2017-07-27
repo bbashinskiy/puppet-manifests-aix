@@ -1,2 +1,0 @@
-#Target for Puppet Agent logs
-local6.*                                                /var/log/puppet/puppet.log
