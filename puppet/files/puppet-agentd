@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# Start/Stop the puppet agent server.
+# Place a startup script in /sbin/init.d, and link to it from /sbin/rc[023].d 
+
+SERVICE="PUPPET agent"
+DAEMON='/opt/puppet/bin/puppet agent --daemonize'
+PIDFILE=/var/run/puppet/agent.pid
+
+case $1 in
+  'start')
+    if [ -x ${DAEMON} ]
+    then
+      $DAEMON
+      echo "${SERVICE} started."
+    else
+      echo "Can't find file ${DAEMON}."
+      echo "${SERVICE} NOT started."
+    fi
+  ;;
+  'stop')
+    if [ -s ${PIDFILE} ]
+    then
+      if kill `cat ${PIDFILE}` >/dev/null 2>&1
+      then
+        echo "${SERVICE} terminated."
+        rm -f ${PIDFILE}
+      fi
+    fi
+  ;;
+  'restart')
+    $0 stop
+    $0 start
+  ;;
+  'status')
+    if [ -s ${PIDFILE} ]
+    then
+      echo "${SERVICE} is runing PID: `cat ${PIDFILE}`"
+    else
+      echo "${SERVICE} is NOT runing"; false 
+    fi
+  ;;
+  *)
+    echo "Usage: $0 start|stop|restart|status"
+    ;;
+esac
